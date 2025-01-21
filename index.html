@@ -34,11 +34,6 @@
 
     <script>
         function submitVote() {
-            if (localStorage.getItem('hasVoted')) {
-                alert('Du hast bereits abgestimmt!');
-                return;
-            }
-
             const formData = {
                 category1: document.getElementById('category1').value.trim(),
                 category2: document.getElementById('category2').value.trim(),
@@ -50,27 +45,24 @@
                 return;
             }
 
-            const token = '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'
-            // Daten an GitHub Actions senden
-            fetch('https://api.github.com/repos/Mooo0042/mooo0042.github.io/dispatches', {
-    method: 'POST',
-    headers: {
-        'Authorization': 'Bearer ${token}',  // Ensure this token is correct
-        'Accept': 'application/vnd.github.everest-preview+json',
-    },
-    body: JSON.stringify({
-        event_type: 'vote',
-        client_payload: formData
-    })
-})
+            // Die URL deiner Google Apps Script Web-App
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbzcDJCcZWsyklp2jGj2AABw_hjKMzAXl7uRMo30Ue1cE4KNh1Ftc0r42zgpVbZWQGl2xA/exec';
 
-                .then(() => {
-                    localStorage.setItem('hasVoted', 'true');
-                    alert('Danke für deine Abstimmung!');
-                })
-                .catch(() => {
-                    alert('Fehler beim Senden der Abstimmung!');
-                });
+            // Daten an Google Apps Script senden
+            fetch(scriptUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Danke für deine Abstimmung!');
+            })
+            .catch(error => {
+                alert('Fehler beim Senden der Abstimmung!');
+            });
         }
     </script>
 </body>
