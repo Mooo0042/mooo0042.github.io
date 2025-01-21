@@ -5,40 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Abstimmung</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
-        button { margin: 5px; padding: 10px 20px; font-size: 16px; }
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { text-align: center; }
+        form { margin-top: 20px; }
+        .category { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"] { width: 100%; padding: 8px; margin-bottom: 10px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
     </style>
 </head>
 <body>
     <h1>Abstimmung</h1>
-    <p>Wähle deine Option:</p>
-    <button onclick="vote('Option 1')">Option 1</button>
-    <button onclick="vote('Option 2')">Option 2</button>
-    <button onclick="vote('Option 3')">Option 3</button>
+    <form id="votingForm">
+        <div class="category">
+            <label for="category1">Kategorie 1</label>
+            <input type="text" id="category1" name="category1" placeholder="Deine Antwort">
+        </div>
+        <div class="category">
+            <label for="category2">Kategorie 2</label>
+            <input type="text" id="category2" name="category2" placeholder="Deine Antwort">
+        </div>
+        <div class="category">
+            <label for="category3">Kategorie 3</label>
+            <input type="text" id="category3" name="category3" placeholder="Deine Antwort">
+        </div>
+        <button type="button" onclick="submitVote()">Abstimmen</button>
+    </form>
 
-<h2>Ergebnisse</h2>
-    <pre id="results">Lade Ergebnisse...</pre>
+    <script>
+        function submitVote() {
+            if (localStorage.getItem('hasVoted')) {
+                alert('Du hast bereits abgestimmt!');
+                return;
+            }
 
-<script>
-        async function fetchResults() {
-            const response = await fetch('results.json');
-            const data = await response.json();
-            document.getElementById('results').innerText = JSON.stringify(data, null, 2);
-        }
+            const formData = {
+                category1: document.getElementById('category1').value.trim(),
+                category2: document.getElementById('category2').value.trim(),
+                category3: document.getElementById('category3').value.trim(),
+            };
 
-        async function vote(option) {
-            await fetch('https://api.github.com/repos/Mooo0042/mooo0042.github.io/dispatches', {
+            if (!formData.category1 || !formData.category2 || !formData.category3) {
+                alert('Bitte alle Kategorien ausfüllen!');
+                return;
+            }
+
+            // Daten an GitHub Actions senden
+            fetch('https://api.github.com/repos/Mooo0042/mooo0042.github.io/dispatches', {
                 method: 'POST',
                 headers: {
                     'Authorization': 'Bearer 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',
                     'Accept': 'application/vnd.github.everest-preview+json',
                 },
-                body: JSON.stringify({ event_type: 'vote', client_payload: { option } })
-            });
-            alert('Stimme abgegeben!');
+                body: JSON.stringify({
+                    event_type: 'vote',
+                    client_payload: formData
+                })
+            })
+                .then(() => {
+                    localStorage.setItem('hasVoted', 'true');
+                    alert('Danke für deine Abstimmung!');
+                })
+                .catch(() => {
+                    alert('Fehler beim Senden der Abstimmung!');
+                });
         }
-
-        fetchResults();
     </script>
 </body>
 </html>
