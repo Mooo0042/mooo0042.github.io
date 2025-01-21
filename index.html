@@ -54,7 +54,8 @@
             fetch('https://api.github.com/repos/Mooo0042/mooo0042.github.io/dispatches', {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'Bearer VOTING_2',
+                    'Authorization': 'Bearer ' + process.env.VOTING_2, // Wenn du das Token serverseitig verwendest
+
                     'Accept': 'application/vnd.github.everest-preview+json',
                 },
                 body: JSON.stringify({
