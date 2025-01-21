@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abstimmung</title>
+    <title>Ergebnisse</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
         h1 { text-align: center; }
@@ -15,62 +15,7 @@
     </style>
 </head>
 <body>
-    <h1>Abstimmung</h1>
-    <form id="votingForm">
-        <div class="category">
-            <label for="category1">Kategorie 1</label>
-            <input type="text" id="category1" name="category1" placeholder="Deine Antwort">
-        </div>
-        <div class="category">
-            <label for="category2">Kategorie 2</label>
-            <input type="text" id="category2" name="category2" placeholder="Deine Antwort">
-        </div>
-        <div class="category">
-            <label for="category3">Kategorie 3</label>
-            <input type="text" id="category3" name="category3" placeholder="Deine Antwort">
-        </div>
-        <button type="button" onclick="submitVote()">Abstimmen</button>
-    </form>
-
-    <script>
-        function doOptions(e) {
-  var output = ContentService.createTextOutput().setMimeType(ContentService.MimeType.JSON);
-  output.appendHeader('Access-Control-Allow-Origin', '*');
-  output.appendHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  output.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
-  return output;
-}
-        function submitVote() {
-            const formData = {
-                category1: document.getElementById('category1').value.trim(),
-                category2: document.getElementById('category2').value.trim(),
-                category3: document.getElementById('category3').value.trim(),
-            };
-
-            if (!formData.category1 || !formData.category2 || !formData.category3) {
-                alert('Bitte alle Kategorien ausfüllen!');
-                return;
-            }
-
-            // Die URL deiner Google Apps Script Web-App
-            const scriptUrl = 'https://script.google.com/macros/s/AKfycbzcDJCcZWsyklp2jGj2AABw_hjKMzAXl7uRMo30Ue1cE4KNh1Ftc0r42zgpVbZWQGl2xA/exec';
-
-            // Daten an Google Apps Script senden
-            fetch('https://script.google.com/macros/s/AKfycbwBsAZRa6MPX6ao_Z0ziCYngwaygxLBp6UB_4hnH86hFTE_EIpPjlt7ISG8D_7H6XL1bQ/exec', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(formData)
-})
-            .then(response => response.json())
-            .then(data => {
-                alert('Danke für deine Abstimmung!');
-            })
-            .catch(error => {
-                alert('Fehler beim Senden der Abstimmung!');
-            });
-        }
-    </script>
+    <h1>Ergebnisse</h1>
+    <p><strong>Es sind noch keine Ergebnisse vorhanden, Noch <em>unbekannt</em> Tage bis zur veröffentlichung der Ergebnisse</strong></p>
 </body>
 </html>
