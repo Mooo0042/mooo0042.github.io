@@ -1,0 +1,33 @@
+name: Abstimmung
+
+on:
+  repository_dispatch:
+    types: [vote]
+
+jobs:
+  update-votes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repo klonen
+        uses: actions/checkout@v3
+
+      - name: Ergebnisse aktualisieren
+        run: |
+          OPTION="${{ github.event.client_payload.option }}"
+          FILE=results.json
+
+          # Datei erstellen, falls sie nicht existiert
+          if [ ! -f "$FILE" ]; then
+            echo '{}' > $FILE
+          fi
+
+          # Zählen aktualisieren
+          jq --arg option "$OPTION" '.[$option] += 1' $FILE > temp.json && mv temp.json $FILE
+
+      - name: Änderungen committen
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results.json
+          git commit -m "Aktualisiere Ergebnisse"
+          git push
