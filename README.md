@@ -16,10 +16,10 @@
     <button onclick="vote('Option 2')">Option 2</button>
     <button onclick="vote('Option 3')">Option 3</button>
 
-    <h2>Ergebnisse</h2>
+<h2>Ergebnisse</h2>
     <pre id="results">Lade Ergebnisse...</pre>
 
-    <script>
+<script>
         async function fetchResults() {
             const response = await fetch('results.json');
             const data = await response.json();
@@ -30,7 +30,7 @@
             await fetch('https://api.github.com/repos/Mooo0042/mooo0042.github.io/dispatches', {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'Bearer GITHUB_TOKEN',
+                    'Authorization': 'Bearer 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',
                     'Accept': 'application/vnd.github.everest-preview+json',
                 },
                 body: JSON.stringify({ event_type: 'vote', client_payload: { option } })
