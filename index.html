@@ -50,11 +50,12 @@
                 return;
             }
 
+            const token = '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'
             // Daten an GitHub Actions senden
             fetch('https://api.github.com/repos/Mooo0042/mooo0042.github.io/dispatches', {
     method: 'POST',
     headers: {
-        'Authorization': 'Bearer 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',  // Ensure this token is correct
+        'Authorization': 'Bearer ${token}',  // Ensure this token is correct
         'Accept': 'application/vnd.github.everest-preview+json',
     },
     body: JSON.stringify({
