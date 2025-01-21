@@ -33,6 +33,13 @@
     </form>
 
     <script>
+        function doOptions(e) {
+  var output = ContentService.createTextOutput().setMimeType(ContentService.MimeType.JSON);
+  output.appendHeader('Access-Control-Allow-Origin', '*');
+  output.appendHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  output.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
+  return output;
+}
         function submitVote() {
             const formData = {
                 category1: document.getElementById('category1').value.trim(),
