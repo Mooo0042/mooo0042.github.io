@@ -56,13 +56,13 @@
             const scriptUrl = 'https://script.google.com/macros/s/AKfycbzcDJCcZWsyklp2jGj2AABw_hjKMzAXl7uRMo30Ue1cE4KNh1Ftc0r42zgpVbZWQGl2xA/exec';
 
             // Daten an Google Apps Script senden
-            fetch(scriptUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            })
+            fetch('https://script.google.com/macros/s/AKfycbzcDJCcZWsyklp2jGj2AABw_hjKMzAXl7uRMo30Ue1cE4KNh1Ftc0r42zgpVbZWQGl2xA/exec', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(formData)
+})
             .then(response => response.json())
             .then(data => {
                 alert('Danke für deine Abstimmung!');
