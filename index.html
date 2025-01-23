@@ -1,61 +1,58 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico?">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ergebnisse</title>
     <style>
-        .box {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 20px;
-            border: 2px solid black;
-            text-align: center;
-        }
-
-        button {
-            padding: 10px 20px;
-            margin: 10px auto; /* Adds space between buttons */
-        }
-
-        .button {
-            align: center;
-            background-color: #04AA6D; /* Green */
-            border: none;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
             color: white;
             text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
         }
-        .ButtonClass {
-            text-align: center;
-            align: center;
+        #content {
+            display: none;
         }
-        body { font-family: Arial, sans-serif; margin: 20px; 
-             background-color: black;
-             }
-        h1 { text-align: center;
-           color: white;
-           }
-        .category { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input[type="text"] { width: 100%; padding: 8px; margin-bottom: 10px; }
-        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
-        p { text-align: center;
-          color: white;
-          }
+        .message {
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
-    <h1>Ergebnisse</h1>
-    <p><strong>Hier können die Ergebnisse Eingesehen werden.</strong></p>
-    <div class="box">
-    <a href="/Lbw2025H1.html"><button type="button" class="button">2025 H1</button></a>
-    <a href="/Lbw2025H2.html"><button type="button" class="button">2025 H2</button></a>
+    <div id="content">
+        <h1>Ergebnisse</h1>
+        <p><strong>Hier können die Ergebnisse eingesehen werden.</strong></p>
+        <div class="box">
+            <a href="/Lbw2025H1.html"><button type="button">2025 H1</button></a>
+            <a href="/Lbw2025H2.html"><button type="button">2025 H2</button></a>
+        </div>
     </div>
+    <div id="blocked" class="message">
+        <h1>Zugriff verweigert</h1>
+        <p>Bitte später zurückkommen!</p>
+    </div>
+
+    <script>
+        // Set the unlock date and time: 25th January at 6:00 AM
+        const unlockDate = new Date("2025-01-25T06:00:00");
+
+        // Get the current date and time
+        const now = new Date();
+
+        // Check if the current date is after the unlock date
+        if (now >= unlockDate) {
+            document.getElementById("content").style.display = "block";
+            document.getElementById("blocked").style.display = "none";
+        } else {
+            document.getElementById("blocked").style.display = "block";
+        }
+    </script>
 </body>
 </html>
