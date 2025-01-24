@@ -26,33 +26,11 @@
     </style>
 </head>
 <body>
-    <div id="content">
         <h1>Ergebnisse</h1>
         <p><strong>Hier können die Ergebnisse eingesehen werden.</strong></p>
         <div class="box">
             <a href="/Lbw2025H1.html"><button type="button">2025 H1</button></a>
             <a href="/Lbw2025H2.html"><button type="button">2025 H2</button></a>
         </div>
-    </div>
-    <div id="blocked" class="message">
-        <h1>Zugriff verweigert</h1>
-        <p>Bitte später zurückkommen!</p>
-    </div>
-
-    <script>
-        // Set the unlock date and time: 25th January at 6:00 AM
-        const unlockDate = new Date("2025-01-25T06:00:00");
-
-        // Get the current date and time
-        const now = new Date();
-
-        // Check if the current date is after the unlock date
-        if (now >= unlockDate) {
-            document.getElementById("content").style.display = "block";
-            document.getElementById("blocked").style.display = "none";
-        } else {
-            document.getElementById("blocked").style.display = "block";
-        }
-    </script>
 </body>
 </html>
