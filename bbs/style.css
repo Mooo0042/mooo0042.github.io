@@ -12,6 +12,7 @@ button {
     background-color: purple;
     border-radius: 8px;
     color: white;
+    padding: 10px 24px;
 }
 
 body {
