@@ -11,4 +11,10 @@
 button {
     background-color: purple;
     border-radius: 8px;
+    color: white;
+}
+
+body {
+    background-color: black;
+    color: white;
 }
