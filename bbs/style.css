@@ -30,7 +30,7 @@ body {
     padding: 20px;
 }
 
-table:hover {
+tr:hover {
     background-color: white;
     color: black;
 }
