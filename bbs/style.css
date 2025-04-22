@@ -21,3 +21,7 @@ body {
     align-content: center;
     text-align: center;
 }
+
+.center {
+    margin: auto;
+}
