@@ -28,4 +28,9 @@ body {
     height: 200px;
     text-align: center;
     padding: 20px;
-  }
+}
+
+table:hover {
+    background-color: white;
+    color: black;
+}
