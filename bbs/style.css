@@ -24,8 +24,8 @@ body {
 }
 
 .center {
-    width: 300px;
-    height: 200px;
+    max-width: 300px;
+    margin: 0 auto;
     text-align: center;
     padding: 20px;
 }
