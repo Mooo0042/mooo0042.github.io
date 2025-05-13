@@ -3,11 +3,9 @@ h1 {
     font-size: 60px;
     text-align: center;
     font-weight: bold;
-    font-family: 'JazzyRabbit', Arial, sans-serif;
 }
 h2 {
     font-size: 45px;
-    font-family: 'JazzyRabbit', Arial, sans-serif;
 }
 p {
     color: rgb(255, 255, 255);
@@ -20,7 +18,6 @@ li {
 body {
     background-color: black;
     margin: 0;
-    font-family: 'RaelaGrotesque', Arial, sans-serif;
 }
 
 button {
