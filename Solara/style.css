@@ -68,6 +68,7 @@ button:hover {
 
 .card.reverse {
   flex-direction: row-reverse;
+  text-align: right;
 }
 
 .card:hover {
