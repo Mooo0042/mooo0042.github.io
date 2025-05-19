@@ -15,6 +15,9 @@ p {
 li {
     font-size: 30px;
 }
+h6 {
+  color: white;
+}
 body {
     background-color: black;
     margin: 0;
