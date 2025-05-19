@@ -70,6 +70,10 @@ button:hover {
   flex-direction: row-reverse;
 }
 
+.card:hover {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+}
+
 .card img {
   width: 300px;
   height: 300px;
