@@ -87,13 +87,6 @@ button:hover {
   display: flex;
   align-items: center;
 }
-.card-content.r {
-  padding: 1.5rem;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  text-align: right;
-}
 
 .card-content h6 {
   margin: 0;
