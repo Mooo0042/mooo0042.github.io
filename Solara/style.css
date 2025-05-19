@@ -80,6 +80,19 @@ button:hover {
   align-items: center;
 }
 
+.card-content h6 {
+  margin: 0;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.8;
+}
+
+.card-content p {
+  margin-top: 0.5rem;
+}
+
+
 @media (max-width: 768px) {
   .card, .card.reverse {
     flex-direction: column;
