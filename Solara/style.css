@@ -13,10 +13,11 @@ p {
     font-size: 30px;
 }
 li {
-    font-size: 30px;
+    font-size: 25px;
 }
 h6 {
   color: white;
+  font-size: 30px;
 }
 body {
     background-color: black;
@@ -85,7 +86,6 @@ button:hover {
 
 .card-content h6 {
   margin: 0;
-  font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 1px;
   opacity: 0.8;
