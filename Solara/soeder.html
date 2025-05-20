@@ -3,9 +3,48 @@
     <head>
         <title>Söder</title>
         <link rel="stylesheet" href="style.css">
+        <script>
+  const correctPassword = "pass1234"; // Passwort hier eintragen
+
+  function getPasswordFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('pw');
+  }
+
+  function checkPassword(pw) {
+    if (pw === correctPassword) {
+      document.getElementById('content').style.display = 'block';
+      document.getElementById('password-form').style.display = 'none';
+    } else {
+      alert('Falsches Passwort!');
+    }
+  }
+
+  window.onload = function() {
+    const urlPw = getPasswordFromUrl();
+    if (urlPw === correctPassword) {
+      document.getElementById('content').style.display = 'block';
+      document.getElementById('password-form').style.display = 'none';
+    }
+  };
+
+  function onSubmit(e) {
+    e.preventDefault();
+    const inputPw = document.getElementById('pw-input').value;
+    checkPassword(inputPw);
+  }
+</script>
+
     </head>
     <body>
-        
+          <div id="password-form">
+    <form onsubmit="onSubmit(event)">
+      <label for="pw-input">Passwort:</label>
+      <input type="password" id="pw-input" />
+      <button type="submit">Einloggen</button>
+    </form>
+  </div>
+  <div id="content" style="display: none;">
   <header>
     <h1>Markus I. von Söder</h1>
     <p>Regierungschef und Staatsoberhaupt von Solara</p>
@@ -48,5 +87,6 @@
       unvorhersehbare Zukunft.
     </p>
   </main>
+  </div>
     </body>
 </html>

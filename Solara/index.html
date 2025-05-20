@@ -4,12 +4,52 @@
         <title>Solara</title>
         <link rel="stylesheet" href="style.css">
         <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+        <script>
+  const correctPassword = "pass1234"; // Passwort hier eintragen
+
+  function getPasswordFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('pw');
+  }
+
+  function checkPassword(pw) {
+    if (pw === correctPassword) {
+      document.getElementById('content').style.display = 'block';
+      document.getElementById('password-form').style.display = 'none';
+    } else {
+      alert('Falsches Passwort!');
+    }
+  }
+
+  window.onload = function() {
+    const urlPw = getPasswordFromUrl();
+    if (urlPw === correctPassword) {
+      document.getElementById('content').style.display = 'block';
+      document.getElementById('password-form').style.display = 'none';
+    }
+  };
+
+  function onSubmit(e) {
+    e.preventDefault();
+    const inputPw = document.getElementById('pw-input').value;
+    checkPassword(inputPw);
+  }
+</script>
+
     </head>
     <body>
         <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
         <script>
             AOS.init();
         </script>
+          <div id="password-form">
+    <form onsubmit="onSubmit(event)">
+      <label for="pw-input">Passwort:</label>
+      <input type="password" id="pw-input" />
+      <button type="submit">Einloggen</button>
+    </form>
+  </div>
+  <div id="content" style="display: none;">
         <h1>Willkommen auf der Staats Website von Solara</h1>
         <p>Unsere Website wird momentan noch gebaut!</p>
         <div class="card" data-aos="fade-right">
@@ -24,7 +64,7 @@
                 <h6>Unsere Flagge</h6>
             </div>
         </div>
-        <a href="soeder">
+        <a href="soeder.html?pw=pass1234">
         <div class="card" data-aos="fade-right">
             <img src="soeder.png" alt="Söder">
             <div class="card-content">
@@ -32,5 +72,6 @@
             </div>
         </div>
         </a>
+        </div>
     </body>
 </html>
