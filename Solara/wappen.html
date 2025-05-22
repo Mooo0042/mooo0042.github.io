@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Söder</title>
+        <link rel="stylesheet" href="style.css">
+        <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+        <script>
+  const correctPassword = "pass1234"; // Passwort hier eintragen
+
+  function getPasswordFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('pw');
+  }
+
+  function checkPassword(pw) {
+    if (pw === correctPassword) {
+      document.getElementById('content').style.display = 'block';
+      document.getElementById('password-form').style.display = 'none';
+    } else {
+      alert('Falsches Passwort!');
+    }
+  }
+
+  window.onload = function() {
+    const urlPw = getPasswordFromUrl();
+    if (urlPw === correctPassword) {
+      document.getElementById('content').style.display = 'block';
+      document.getElementById('password-form').style.display = 'none';
+    }
+  };
+
+  function onSubmit(e) {
+    e.preventDefault();
+    const inputPw = document.getElementById('pw-input').value;
+    checkPassword(inputPw);
+  }
+</script>
+
+    </head>
+    <body>
+      <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+        <script>
+            AOS.init();
+        </script>
+          <div id="password-form" data-aos="zoom-in-down" data-aos-duration="3000">
+    <form onsubmit="onSubmit(event)">
+      <label for="pw-input">Passwort:</label>
+      <input type="password" id="pw-input" />
+      <button type="submit">Einloggen</button>
+    </form>
+  </div>
+  <div id="content" style="display: none;">
+    <h1>Die Geschichte des Wappens von Solara</h1>
+    <p>Als der Staat Solara gegründet wurde, stand das Land vor einem Wendepunkt. Es war eine Zeit der Umbrüche – alte Machtstrukturen fielen, Natur und Technik trafen erstmals aufeinander, und die Menschen suchten nach einem neuen Symbol, das ihre Werte vereinen konnte.</p>
+    <p>
+        Die Legende erzählt vom jungen Arin, einem einfachen Hirten, der tief in den Bergen lebte. Eines Tages begegnete er einem ungewöhnlichen Tier – einem riesigen, smaragdgrünen Gorilla. Dieses Tier war kein gewöhnliches Wesen: Es war ein Relikt aus einer Zeit, in der die Natur noch selbst über das Land herrschte. Niemand wusste, woher es kam, aber es war intelligent, ruhig – und voller Würde.
+    </p>
+    <p>
+        Arin erkannte schnell, dass der Gorilla nicht gezähmt werden konnte, aber dass er bereit war, Seite an Seite mit ihm zu gehen. Zwischen Mensch und Tier entstand ein tiefes Vertrauen. Zusammen durchquerten sie ganz Solara, halfen, Konflikte zu schlichten, zeigten Wege durch unzugängliche Gebiete und wurden zu einem lebenden Sinnbild für Zusammenarbeit, Mut und Respekt vor der Natur.
+    </p>
+    <p>
+        Der grüne Gorilla wurde zum Symbol der Kraft, Ausdauer und der Verbindung zur Natur. Arin, der auf seinem Rücken ritt, stand für Führung, Verantwortung und menschliche Kreativität. Das Wappen zeigt diesen Moment – nicht als Mythos, sondern als Erinnerung an eine Zeit, in der Mensch und Natur gemeinsam den Grundstein für Solara legten.
+    </p>
+    <p>
+        Heute erinnert das Wappen von Solara daran, dass wahre Stärke nicht in Macht, sondern in Verbindung liegt – zur Natur, zueinander und zu den Werten, die uns tragen.
+    </p>
+  </div>
+    </body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Söder</title>
+        <link rel="stylesheet" href="style.css">
+        <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+        <script>
+  const correctPassword = "pass1234"; // Passwort hier eintragen
+
+  function getPasswordFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('pw');
+  }
+
+  function checkPassword(pw) {
+    if (pw === correctPassword) {
+      document.getElementById('content').style.display = 'block';
+      document.getElementById('password-form').style.display = 'none';
+    } else {
+      alert('Falsches Passwort!');
+    }
+  }
+
+  window.onload = function() {
+    const urlPw = getPasswordFromUrl();
+    if (urlPw === correctPassword) {
+      document.getElementById('content').style.display = 'block';
+      document.getElementById('password-form').style.display = 'none';
+    }
+  };
+
+  function onSubmit(e) {
+    e.preventDefault();
+    const inputPw = document.getElementById('pw-input').value;
+    checkPassword(inputPw);
+  }
+</script>
+
+    </head>
+    <body>
+      <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+        <script>
+            AOS.init();
+        </script>
+          <div id="password-form" data-aos="zoom-in-down" data-aos-duration="3000">
+    <form onsubmit="onSubmit(event)">
+      <label for="pw-input">Passwort:</label>
+      <input type="password" id="pw-input" />
+      <button type="submit">Einloggen</button>
+    </form>
+  </div>
+  <div id="content" style="display: none;">
+    <h1>Die Flagge von Solara – Ein Symbol der Stärke, Hoffnung und Einheit</h1>
+    <p>Die Flagge von Solara erzählt die Geschichte eines Volkes, das in Harmonie mit der Natur lebt und aus den Tiefen seiner Vergangenheit eine Vision für die Zukunft geformt hat.</p>
+    <p>
+        Der weiße Gorilla im Zentrum steht für das legendäre Tier, das einst Seite an Seite mit dem jungen Arin durch das Land zog. Er verkörpert nicht nur rohe Kraft, sondern auch Weisheit, Ruhe und eine tiefe Verbindung zur natürlichen Welt. Seine weiße Farbe symbolisiert Reinheit, Frieden und die Klarheit des Geistes – ein Ideal, dem Solara bis heute treu bleibt.
+    </p>
+    <p>
+        Der grüne Boden unter dem Gorilla repräsentiert das fruchtbare Land, die Wälder, Felder und Hügel, die das Rückgrat der solaranischen Gesellschaft bilden. Grün steht auch für Wachstum, Leben und die tiefe Verbundenheit des Volkes mit seiner Umwelt.
+    </p>
+    <p>
+        Der schwarze Himmel im oberen Teil der Flagge erinnert an die Dunkelheit der Vergangenheit – an Zeiten von Unsicherheit, Konflikten und Orientierungslosigkeit. Doch selbst dort leuchtet ein einzelner weißer Stern: das Symbol der Hoffnung, der Führung und des Zusammenhalts. Der Stern steht für die Idee, dass selbst in der tiefsten Dunkelheit ein Licht scheint, solange das Volk geeint ist.
+    </p>
+    <p>
+        Diese Flagge ist kein bloßes Abzeichen – sie ist ein Versprechen. Ein Versprechen, dass Solara niemals seine Wurzeln vergisst. Dass es seine Stärke aus Zusammenarbeit, Mut und dem Gleichgewicht zwischen Fortschritt und Natur schöpft.
+    </p>
+  </div>
+    </body>
+</html>
