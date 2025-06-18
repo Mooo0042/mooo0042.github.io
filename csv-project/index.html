@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CSV Tool Download</title>
+<style>
+  :root {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --accent-color: #9b59b6; /* Lila */
+    --button-bg: #2c2c2c;
+    --button-hover-bg: #3d2c5a;
+  }
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  h1 {
+    color: var(--accent-color);
+  }
+  .downloads {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    width: 300px;
+  }
+  button, a.button {
+    background-color: var(--button-bg);
+    color: var(--text-color);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    display: block;
+    transition: background-color 0.3s;
+  }
+  button:hover, a.button:hover {
+    background-color: var(--button-hover-bg);
+  }
+  .os-selector {
+    margin-top: 2rem;
+    color: var(--text-color);
+  }
+  .os-selector label {
+    margin-right: 1rem;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<h1>CSV Tool herunterladen</h1>
+<p>Dein Betriebssystem wurde erkannt, aber du kannst auch manuell wechseln:</p>
+
+<div class="downloads" id="download-buttons">
+  <!-- Buttons werden hier per JS eingefügt -->
+</div>
+
+<div class="os-selector">
+  <p><strong>Andere Plattform wählen:</strong></p>
+  <label><input type="radio" name="os" value="windows" /> Windows</label>
+  <label><input type="radio" name="os" value="mac" /> macOS</label>
+  <label><input type="radio" name="os" value="linux" /> Linux</label>
+</div>
+
+<script>
+  const releases = {
+    windows: [
+      { label: "Setup Installer", url: "https://github.com/Mod-Sauce/CSV-IServ/releases/download/v1.1.0/CSV-IServ-Converter-Setup.exe" },
+      { label: "Portable Version", url: "https://github.com/Mod-Sauce/CSV-IServ/releases/download/v1.1.0/CSV-IServ-Converter-Portable.exe" },
+    ],
+    mac: [
+      { label: "macOS App", url: "https://github.com/Mod-Sauce/CSV-IServ/releases/download/v1.1.0/CSV-IServ-Converter-macOS.zip" }
+    ],
+    linux: [
+      { label: "Linux Version", url: "https://github.com/Mod-Sauce/CSV-IServ/releases/download/v1.1.0/CSV-IServ-Converter-Linux.zip" }
+    ]
+  };
+
+  const container = document.getElementById("download-buttons");
+  const osRadios = document.querySelectorAll('input[name="os"]');
+
+  function renderButtons(os) {
+    container.innerHTML = ""; // leeren
+
+    releases[os].forEach(item => {
+      const a = document.createElement("a");
+      a.href = item.url;
+      a.textContent = item.label;
+      a.className = "button";
+      a.setAttribute("download", "");
+      container.appendChild(a);
+    });
+
+    // Optionale Buttons für die anderen OS immer anzeigen (kleiner)
+    const otherOS = Object.keys(releases).filter(o => o !== os);
+    otherOS.forEach(o => {
+      releases[o].forEach(item => {
+        const a = document.createElement("a");
+        a.href = item.url;
+        a.textContent = `${item.label} (${o.charAt(0).toUpperCase() + o.slice(1)})`;
+        a.className = "button";
+        a.style.fontSize = "0.85rem";
+        a.style.opacity = "0.7";
+        a.style.marginTop = "0.25rem";
+        a.setAttribute("download", "");
+        container.appendChild(a);
+      });
+    });
+  }
+
+  // OS erkennen
+  function detectOS() {
+    const platform = navigator.platform.toLowerCase();
+    if (platform.includes("win")) return "windows";
+    if (platform.includes("mac")) return "mac";
+    if (platform.includes("linux")) return "linux";
+    return "windows"; // Default fallback
+  }
+
+  const userOS = detectOS();
+  renderButtons(userOS);
+
+  // Radio Buttons reagieren
+  osRadios.forEach(radio => {
+    radio.addEventListener("change", () => {
+      renderButtons(radio.value);
+    });
+  });
+
+  // Standardmäßig erkannter OS-Radio selektieren
+  document.querySelector(`input[name="os"][value="${userOS}"]`).checked = true;
+</script>
+
+</body>
+</html>
