@@ -88,11 +88,16 @@
     ]
   };
 
-  const container = document.getElementById("download-buttons");
+    const container = document.getElementById("download-buttons");
   const osRadios = document.querySelectorAll('input[name="os"]');
 
   function renderButtons(os) {
-    container.innerHTML = ""; // leeren
+    container.innerHTML = ""; // Container leeren
+
+    if (!releases[os]) {
+      container.textContent = "Keine Downloads verfügbar.";
+      return;
+    }
 
     releases[os].forEach(item => {
       const a = document.createElement("a");
@@ -102,45 +107,28 @@
       a.setAttribute("download", "");
       container.appendChild(a);
     });
-
-    // Optionale Buttons für die anderen OS immer anzeigen (kleiner)
-    const otherOS = Object.keys(releases).filter(o => o !== os);
-    otherOS.forEach(o => {
-      releases[o].forEach(item => {
-        const a = document.createElement("a");
-        a.href = item.url;
-        a.textContent = `${item.label} (${o.charAt(0).toUpperCase() + o.slice(1)})`;
-        a.className = "button";
-        a.style.fontSize = "0.85rem";
-        a.style.opacity = "0.7";
-        a.style.marginTop = "0.25rem";
-        a.setAttribute("download", "");
-        container.appendChild(a);
-      });
-    });
   }
 
-  // OS erkennen
   function detectOS() {
     const platform = navigator.platform.toLowerCase();
     if (platform.includes("win")) return "windows";
     if (platform.includes("mac")) return "mac";
     if (platform.includes("linux")) return "linux";
-    return "windows"; // Default fallback
+    return "windows"; // Fallback
   }
 
   const userOS = detectOS();
   renderButtons(userOS);
 
-  // Radio Buttons reagieren
   osRadios.forEach(radio => {
     radio.addEventListener("change", () => {
       renderButtons(radio.value);
     });
   });
 
-  // Standardmäßig erkannter OS-Radio selektieren
-  document.querySelector(`input[name="os"][value="${userOS}"]`).checked = true;
+  // Standardmäßig das erkannte OS auswählen
+  const defaultRadio = document.querySelector(`input[name="os"][value="${userOS}"]`);
+  if (defaultRadio) defaultRadio.checked = true;
 </script>
 
 </body>
