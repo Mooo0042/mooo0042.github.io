@@ -9,15 +9,15 @@
     :root {
       --bg-color-dark: #121212;
       --text-color-dark: #e0e0e0;
-      --accent-color-dark: #9b59b6;
+      --accent-color-dark: #0000FF;
       --button-bg-dark: #2c2c2c;
-      --button-hover-bg-dark: #3d2c5a;
+      --button-hover-bg-dark: #1a1a66;
 
       --bg-color-light: #f5f5f5;
       --text-color-light: #202020;
-      --accent-color-light: #8e44ad;
+      --accent-color-light: #0000FF;
       --button-bg-light: #e0e0e0;
-      --button-hover-bg-light: #c8b8d7;
+      --button-hover-bg-light: #b3b3ff;
     }
 
     body {
@@ -182,8 +182,7 @@
 
   applyTheme();
 
-  // Listen for changes in system theme and update
-  if(window.matchMedia) {
+  if (window.matchMedia) {
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
       applyTheme();
     });
