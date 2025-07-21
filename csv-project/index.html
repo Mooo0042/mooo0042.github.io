@@ -1,105 +1,143 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<link rel="icon" href="csv.ico" type="image/x-icon" />
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>CSV Tool Download</title>
-<style>
-  :root {
-    --bg-color: #121212;
-    --text-color: #e0e0e0;
-    --accent-color: #9b59b6; /* Lila */
-    --button-bg: #2c2c2c;
-    --button-hover-bg: #3d2c5a;
-  }
-  body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  h1 {
-    color: var(--accent-color);
-  }
-  .downloads {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-top: 1.5rem;
-    width: 300px;
-  }
-  button, a.button {
-    background-color: var(--button-bg);
-    color: var(--text-color);
-    border: none;
-    padding: 12px 20px;
-    border-radius: 6px;
-    font-size: 1rem;
-    cursor: pointer;
-    text-decoration: none;
-    text-align: center;
-    display: block;
-    transition: background-color 0.3s;
-  }
-  button:hover, a.button:hover {
-    background-color: var(--button-hover-bg);
-  }
-  .os-selector {
-    margin-top: 2rem;
-    color: var(--text-color);
-  }
-  .os-selector label {
-    margin-right: 1rem;
-    cursor: pointer;
-  }
-</style>
+  <link rel="icon" href="csv.ico" type="image/x-icon" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSV Tool Download</title>
+  <style>
+    :root {
+      --bg-color-dark: #121212;
+      --text-color-dark: #e0e0e0;
+      --accent-color-dark: #9b59b6;
+      --button-bg-dark: #2c2c2c;
+      --button-hover-bg-dark: #3d2c5a;
+
+      --bg-color-light: #f5f5f5;
+      --text-color-light: #202020;
+      --accent-color-light: #8e44ad;
+      --button-bg-light: #e0e0e0;
+      --button-hover-bg-light: #c8b8d7;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body.dark {
+      background-color: var(--bg-color-dark);
+      color: var(--text-color-dark);
+    }
+
+    body.light {
+      background-color: var(--bg-color-light);
+      color: var(--text-color-light);
+    }
+
+    h1 {
+      color: var(--accent-color-dark);
+    }
+
+    body.light h1 {
+      color: var(--accent-color-light);
+    }
+
+    .downloads {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      width: 300px;
+    }
+
+    button, a.button {
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      display: block;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body.dark button, body.dark a.button {
+      background-color: var(--button-bg-dark);
+      color: var(--text-color-dark);
+    }
+
+    body.dark button:hover, body.dark a.button:hover {
+      background-color: var(--button-hover-bg-dark);
+    }
+
+    body.light button, body.light a.button {
+      background-color: var(--button-bg-light);
+      color: var(--text-color-light);
+    }
+
+    body.light button:hover, body.light a.button:hover {
+      background-color: var(--button-hover-bg-light);
+    }
+
+    .os-selector {
+      margin-top: 2rem;
+    }
+
+    .os-selector label {
+      margin-right: 1rem;
+      cursor: pointer;
+      color: inherit;
+    }
+  </style>
 </head>
 <body>
 
 <h1>CSV Tool herunterladen</h1>
 <p>Dein Betriebssystem wurde erkannt, aber du kannst auch manuell wechseln:</p>
 
-<div class="downloads" id="download-buttons">
-  <!-- Buttons werden hier per JS eingefügt -->
-</div>
+<div class="downloads" id="download-buttons"></div>
 
 <div class="os-selector">
   <p><strong>Andere Plattform wählen:</strong></p>
   <label><input type="radio" name="os" value="windows" /> Windows</label>
   <label><input type="radio" name="os" value="mac" /> macOS</label>
   <label><input type="radio" name="os" value="linux" /> Linux</label>
+  <label><input type="radio" name="os" value="android" /> Android</label>
 </div>
 
 <script>
   const releases = {
     windows: [
       { label: "Setup Installer", url: "https://github.com/Mod-Sauce/CSV-IServ/releases/download/v1.1.1/CSV-IServ-Converter-Setup.exe" },
-      { label: "Portable Version", url: "https://github.com/Mod-Sauce/CSV-IServ/releases/download/v1.1.1/CSV-IServ-Converter.exe" },
+      { label: "Portable Version", url: "https://github.com/Mod-Sauce/CSV-IServ/releases/download/v1.1.1/CSV-IServ-Converter.exe" }
     ],
     mac: [
       { label: "macOS App", url: "https://github.com/Mod-Sauce/CSV-IServ/releases/download/v1.1.1/CSV-IServ-Converter-macOS.zip" }
     ],
     linux: [
       { label: "Linux Version", url: "https://github.com/Mod-Sauce/CSV-IServ/releases/download/v1.1.1/CSV-IServ-Converter-Linux.zip" }
+    ],
+    android: [
+      { label: "Android APK", url: "https://github.com/Mod-Sauce/CSV-IServ/releases/download/v1.1.1/CSV-IServ-Converter.apk" }
     ]
   };
 
-    const container = document.getElementById("download-buttons");
+  const container = document.getElementById("download-buttons");
   const osRadios = document.querySelectorAll('input[name="os"]');
 
   function renderButtons(os) {
-    container.innerHTML = ""; // Container leeren
-
+    container.innerHTML = "";
     if (!releases[os]) {
       container.textContent = "Keine Downloads verfügbar.";
       return;
     }
-
     releases[os].forEach(item => {
       const a = document.createElement("a");
       a.href = item.url;
@@ -112,10 +150,22 @@
 
   function detectOS() {
     const platform = navigator.platform.toLowerCase();
+    const userAgent = navigator.userAgent.toLowerCase();
+    if (userAgent.includes("android")) return "android";
     if (platform.includes("win")) return "windows";
     if (platform.includes("mac")) return "mac";
     if (platform.includes("linux")) return "linux";
-    return "windows"; // Fallback
+    return "windows";
+  }
+
+  function applyTheme() {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.body.classList.add('dark');
+      document.body.classList.remove('light');
+    } else {
+      document.body.classList.add('light');
+      document.body.classList.remove('dark');
+    }
   }
 
   const userOS = detectOS();
@@ -127,9 +177,17 @@
     });
   });
 
-  // Standardmäßig das erkannte OS auswählen
   const defaultRadio = document.querySelector(`input[name="os"][value="${userOS}"]`);
   if (defaultRadio) defaultRadio.checked = true;
+
+  applyTheme();
+
+  // Listen for changes in system theme and update
+  if(window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      applyTheme();
+    });
+  }
 </script>
 
 </body>
