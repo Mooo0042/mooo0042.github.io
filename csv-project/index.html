@@ -109,7 +109,6 @@
   <label><input type="radio" name="os" value="windows" /> Windows</label>
   <label><input type="radio" name="os" value="mac" /> macOS</label>
   <label><input type="radio" name="os" value="linux" /> Linux</label>
-  <label><input type="radio" name="os" value="android" /> Android</label>
 </div>
 
 <script>
@@ -124,9 +123,6 @@
     linux: [
       { label: "Linux Version", url: "https://github.com/Mod-Sauce/CSV-IServ/releases/download/v1.1.1/CSV-IServ-Converter-Linux.zip" }
     ],
-    android: [
-      { label: "Android APK", url: "https://github.com/Mod-Sauce/CSV-IServ/releases/download/v1.1.1/CSV-IServ-Converter.apk" }
-    ]
   };
 
   const container = document.getElementById("download-buttons");
@@ -151,7 +147,6 @@
   function detectOS() {
     const platform = navigator.platform.toLowerCase();
     const userAgent = navigator.userAgent.toLowerCase();
-    if (userAgent.includes("android")) return "android";
     if (platform.includes("win")) return "windows";
     if (platform.includes("mac")) return "mac";
     if (platform.includes("linux")) return "linux";
