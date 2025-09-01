@@ -2,90 +2,486 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quellen</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background-color: #36213e;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #36213e 0%, #2a1a32 100%);
       color: #b8f3ff;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
       padding: 20px;
     }
+
     h1 {
       text-align: center;
       color: #8ac6d0;
-      padding: 30px;
+      font-size: 2.5rem;
+      margin: 2rem 0 3rem 0;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      font-weight: 300;
+      letter-spacing: 1px;
     }
+
+    .sources-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
     .quelle {
-      background-color: #63768d;
-      margin: 10px 0;
-      padding: 15px;
-      border-radius: 8px;
-      word-break: break-all;
+      background: linear-gradient(145deg, #63768d, #547089);
+      margin: 0;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 
+        0 8px 32px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(184,243,255,0.1);
     }
-    a {
+
+    .quelle::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(138,198,208,0.1),
+        transparent
+      );
+      transition: left 0.5s;
+    }
+
+    .quelle:hover::before {
+      left: 100%;
+    }
+
+    .quelle:hover {
+      transform: translateY(-4px);
+      box-shadow: 
+        0 12px 40px rgba(0,0,0,0.4),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+      border-color: rgba(138,198,208,0.3);
+    }
+
+    .quelle a {
       color: #b8f3ff;
       text-decoration: none;
+      display: block;
+      word-break: break-all;
+      font-size: 0.95rem;
+      position: relative;
+      z-index: 1;
+      transition: color 0.3s ease;
     }
-    a:hover {
+
+    .quelle:hover a {
       color: #8ac6d0;
-      text-decoration: underline;
+    }
+
+    .domain-badge {
+      display: inline-block;
+      background: rgba(138,198,208,0.2);
+      color: #8ac6d0;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .section-divider {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #8ac6d0, transparent);
+      margin: 3rem 0;
+      border-radius: 1px;
+    }
+
+    .image-sources-section {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(99,118,141,0.1);
+      border-radius: 12px;
+      border: 1px solid rgba(138,198,208,0.2);
+    }
+
+    .in-progress {
+      background: linear-gradient(145deg, #8ac6d0, #7bb3bd);
+      color: #36213e;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      display: inline-block;
+      box-shadow: 0 4px 15px rgba(138,198,208,0.3);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      background: rgba(99,118,141,0.3);
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      text-align: center;
+      border: 1px solid rgba(138,198,208,0.2);
+    }
+
+    .stat-number {
+      display: block;
+      font-size: 2rem;
+      font-weight: bold;
+      color: #8ac6d0;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 768px) {
+      .sources-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      h1 {
+        font-size: 2rem;
+        margin: 1.5rem 0 2rem 0;
+      }
+      
+      .container {
+        padding: 15px;
+      }
+      
+      .stats {
+        gap: 1rem;
+      }
+    }
+
+    /* Smooth scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #36213e;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #63768d;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #8ac6d0;
     }
   </style>
 </head>
 <body>
-  <h1>Quellen zu unser Präsentation</h1>
+  <div class="container">
+    <h1>Quellen zu unserer Präsentation</h1>
 
-  <div class="quelle"><a href="https://www.interregmeuserhine.eu">https://www.interregmeuserhine.eu</a></div>
-  <div class="quelle"><a href="https://bmdv.bund.de">https://bmdv.bund.de</a></div>
-  <div class="quelle"><a href="https://www.umweltbundesamt.de">https://www.umweltbundesamt.de</a></div>
-  <div class="quelle"><a href="https://www.bundesnetzagentur.de">https://www.bundesnetzagentur.de</a></div>
-  <div class="quelle"><a href="https://www.bmwk.de">https://www.bmwk.de</a></div>
-  <div class="quelle"><a href="https://www.bdh-industrie.de">https://www.bdh-industrie.de</a></div>
-  <div class="quelle"><a href="https://www.euregio-mr.info">https://www.euregio-mr.info</a></div>
-  <div class="quelle"><a href="https://www.umweltbundesamt.de/themen/abfall-ressourcen">https://www.umweltbundesamt.de/themen/abfall-ressourcen</a></div>
-  <div class="quelle"><a href="https://www.rmv.de">https://www.rmv.de</a></div>
-  <div class="quelle"><a href="https://www.provadis.de">https://www.provadis.de</a></div>
-  <div class="quelle"><a href="https://www.frankfurt-main.ihk.de/ausbildung">https://www.frankfurt-main.ihk.de/ausbildung</a></div>
-  <div class="quelle"><a href="https://de.indeed.com/jobs?l=Rhein-Main-Gebiet">https://de.indeed.com/jobs?l=Rhein-Main-Gebiet</a></div>
-  <div class="quelle"><a href="https://eures.europa.eu">https://eures.europa.eu</a></div>
-  <div class="quelle"><a href="https://www.arbeitsagentur.de/arbeitsmarktdaten">https://www.arbeitsagentur.de/arbeitsmarktdaten</a></div>
-  <div class="quelle"><a href="https://www.rhein-erft-kreis.de/arbeitsmarkt">https://www.rhein-erft-kreis.de/arbeitsmarkt</a></div>
-  <div class="quelle"><a href="https://jobboerse.arbeitsagentur.de">https://jobboerse.arbeitsagentur.de</a></div>
-  <div class="quelle"><a href="https://www.frankfurt-main.ihk.de/ausbildung/ausbildungsplatzboerse">https://www.frankfurt-main.ihk.de/ausbildung/ausbildungsplatzboerse</a></div>
-  <div class="quelle"><a href="https://www.rhein-maas-berufskolleg.de">https://www.rhein-maas-berufskolleg.de</a></div>
-  <div class="quelle"><a href="https://www.hwk-rhein-main.de">https://www.hwk-rhein-main.de</a></div>
-  <div class="quelle"><a href="https://youregion-emr.eu/de/">https://youregion-emr.eu/de/</a></div>
-  <div class="quelle"><a href="https://en.wikipedia.org/wiki/Euregio_Meuse-Rhine">https://en.wikipedia.org/wiki/Euregio_Meuse-Rhine</a></div>
-  <div class="quelle"><a href="https://www.ihk.de/aachen/standortpolitik/standort-region-aachen/kurzprofil-euregio-604732">https://www.ihk.de/aachen/standortpolitik/standort-region-aachen/kurzprofil-euregio-604732</a></div>
-  <div class="quelle"><a href="https://metropolitane-grenzregionen.eu/metropolitane-grenzregionen/imeg-regionen/euregio-maas-rhein/">https://metropolitane-grenzregionen.eu/metropolitane-grenzregionen/imeg-regionen/euregio-maas-rhein/</a></div>
-  <div class="quelle"><a href="https://www.aachen.de/europa-internationales/euregio-maas-rhein/">https://www.aachen.de/europa-internationales/euregio-maas-rhein/</a></div>
-  <div class="quelle"><a href="https://de.wikipedia.org/wiki/Euregio-Maas-Rhein">https://de.wikipedia.org/wiki/Euregio-Maas-Rhein</a></div>
-  <div class="quelle"><a href="https://euregio-mr.info/de/ueber-uns/evtz/">https://euregio-mr.info/de/ueber-uns/evtz/</a></div>
-  <div class="quelle"><a href="https://vorschau-geografie.dilewe.de/inhalt/2-4-wetter-und-klima/index.html">https://vorschau-geografie.dilewe.de/inhalt/2-4-wetter-und-klima/index.html</a></div>
-  <div class="quelle"><a href="https://de.wikipedia.org/wiki/Geographie_Nordrhein-Westfalens">https://de.wikipedia.org/wiki/Geographie_Nordrhein-Westfalens</a></div>
-  <div class="quelle"><a href="https://de.wikipedia.org/wiki/Liste_von_Bergwerken_in_der_Eifel">https://de.wikipedia.org/wiki/Liste_von_Bergwerken_in_der_Eifel</a></div>
-  <div class="quelle"><a href="https://www.industriemuseen-emr.de/de_DE/oremining">https://www.industriemuseen-emr.de/de_DE/oremining</a></div>
-  <div class="quelle"><a href="https://www.industriemuseen-emr.de/de_DE/industrialization">https://www.industriemuseen-emr.de/de_DE/industrialization</a></div>
-  <div class="quelle"><a href="https://www.industriemuseen-emr.de/de_DE/coalmining">https://www.industriemuseen-emr.de/de_DE/coalmining</a></div>
-  <div class="quelle"><a href="https://www.aufmerksam-wandern.de/themen/thema_026.php">https://www.aufmerksam-wandern.de/themen/thema_026.php</a></div>
-  <div class="quelle"><a href="https://www.erih.net/i-want-to-go-there/site/regionalroute/euregio-meuse-rhine">https://www.erih.net/i-want-to-go-there/site/regionalroute/euregio-meuse-rhine</a></div>
-  <div class="quelle"><a href="https://euregio-mr.info/de/ueber-uns/organisation/">https://euregio-mr.info/de/ueber-uns/organisation/</a></div>
-  <div class="quelle"><a href="https://de.wikipedia.org/wiki/MAGMA">https://de.wikipedia.org/wiki/MAGMA</a></div>
-  <div class="quelle"><a href="https://en.wikipedia.org/wiki/Magma_(company)">https://en.wikipedia.org/wiki/Magma_(company)</a></div>
-  <div class="quelle"><a href="https://en.wikipedia.org/wiki/Brightlands_Chemelot_Campus">https://en.wikipedia.org/wiki/Brightlands_Chemelot_Campus</a></div>
-  <div class="quelle"><a href="https://www.maastrichtuniversity.nl/news/ten-years-brightlands-chemelot-campus-limburgs-innovation-engine-global-challenges">https://www.maastrichtuniversity.nl/news/ten-years-brightlands-chemelot-campus-limburgs-innovation-engine-global-challenges</a></div>
-  <div class="quelle"><a href="https://en.wikipedia.org/wiki/Umicore">https://en.wikipedia.org/wiki/Umicore</a></div>
-  <div class="quelle"><a href="https://euregio-mr.info/de/themen/interessenvertretung-und-regionalvermarktung.php">https://euregio-mr.info/de/themen/interessenvertretung-und-regionalvermarktung.php</a></div>
-  <div class="quelle"><a href="https://euregio-mr.info/de/ueber-uns/europaeische-netzwerke/ageg.php">https://euregio-mr.info/de/ueber-uns/europaeische-netzwerke/ageg.php</a></div>
-  <div class="quelle"><a href="https://de.wikipedia.org/wiki/Arbeitsgemeinschaft_Europäischer_Grenzregionen">https://de.wikipedia.org/wiki/Arbeitsgemeinschaft_Europäischer_Grenzregionen</a></div>
-  <div class="quelle"><a href="https://pdg.be/desktopdefault.aspx/tabid-4070/">https://pdg.be/desktopdefault.aspx/tabid-4070/</a></div>
-  <div class="quelle"><a href="https://de.wikipedia.org/wiki/RWTH_Aachen">https://de.wikipedia.org/wiki/RWTH_Aachen</a></div>
-  <div class="quelle"><a href="https://www.aved-ihk.be/region/euregio-maas-rhein/">https://www.aved-ihk.be/region/euregio-maas-rhein/</a></div>
-  <div class="quelle"><a href="https://avv.de/de/aktuelles/neuigkeiten/dreilaenderzug-startet-am-30-juni">https://avv.de/de/aktuelles/neuigkeiten/dreilaenderzug-startet-am-30-juni</a></div>
-  <div class="quelle"><a href="https://avv.de/files/avv/files/fahrplaene/linienfahrplaene/385_avv.pdf">https://avv.de/files/avv/files/fahrplaene/linienfahrplaene/385_avv.pdf</a></div>
-  <div class="quelle"><a href="https://avv.de/euregioticket">https://avv.de/euregioticket</a></div>
+    <div class="stats">
+      <div class="stat-item">
+        <span class="stat-number">43</span>
+        <span class="stat-label">Online-Quellen</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">12</span>
+        <span class="stat-label">Kategorien</span>
+      </div>
+    </div>
 
-  <h1>Bild Quellen & Lizenzen</h1>
-  <div class="quelle"><a href="">In Progress</a></div>
+    <div class="sources-grid">
+      <div class="quelle">
+        <div class="domain-badge">EU Programme</div>
+        <a href="https://www.interregmeuserhine.eu">https://www.interregmeuserhine.eu</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Bundesministerium</div>
+        <a href="https://bmdv.bund.de">https://bmdv.bund.de</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Umwelt</div>
+        <a href="https://www.umweltbundesamt.de">https://www.umweltbundesamt.de</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Netzagentur</div>
+        <a href="https://www.bundesnetzagentur.de">https://www.bundesnetzagentur.de</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Wirtschaft</div>
+        <a href="https://www.bmwk.de">https://www.bmwk.de</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Industrie</div>
+        <a href="https://www.bdh-industrie.de">https://www.bdh-industrie.de</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Euregio</div>
+        <a href="https://www.euregio-mr.info">https://www.euregio-mr.info</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Umwelt</div>
+        <a href="https://www.umweltbundesamt.de/themen/abfall-ressourcen">https://www.umweltbundesamt.de/themen/abfall-ressourcen</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Verkehr</div>
+        <a href="https://www.rmv.de">https://www.rmv.de</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Bildung</div>
+        <a href="https://www.provadis.de">https://www.provadis.de</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">IHK</div>
+        <a href="https://www.frankfurt-main.ihk.de/ausbildung">https://www.frankfurt-main.ihk.de/ausbildung</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Jobs</div>
+        <a href="https://de.indeed.com/jobs?l=Rhein-Main-Gebiet">https://de.indeed.com/jobs?l=Rhein-Main-Gebiet</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">EU Jobs</div>
+        <a href="https://eures.europa.eu">https://eures.europa.eu</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Arbeitsagentur</div>
+        <a href="https://www.arbeitsagentur.de/arbeitsmarktdaten">https://www.arbeitsagentur.de/arbeitsmarktdaten</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Regional</div>
+        <a href="https://www.rhein-erft-kreis.de/arbeitsmarkt">https://www.rhein-erft-kreis.de/arbeitsmarkt</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Jobs</div>
+        <a href="https://jobboerse.arbeitsagentur.de">https://jobboerse.arbeitsagentur.de</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">IHK</div>
+        <a href="https://www.frankfurt-main.ihk.de/ausbildung/ausbildungsplatzboerse">https://www.frankfurt-main.ihk.de/ausbildung/ausbildungsplatzboerse</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Bildung</div>
+        <a href="https://www.rhein-maas-berufskolleg.de">https://www.rhein-maas-berufskolleg.de</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Handwerk</div>
+        <a href="https://www.hwk-rhein-main.de">https://www.hwk-rhein-main.de</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Euregio</div>
+        <a href="https://youregion-emr.eu/de/">https://youregion-emr.eu/de/</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Wikipedia</div>
+        <a href="https://en.wikipedia.org/wiki/Euregio_Meuse-Rhine">https://en.wikipedia.org/wiki/Euregio_Meuse-Rhine</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">IHK</div>
+        <a href="https://www.ihk.de/aachen/standortpolitik/standort-region-aachen/kurzprofil-euregio-604732">https://www.ihk.de/aachen/standortpolitik/standort-region-aachen/kurzprofil-euregio-604732</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Grenzregionen</div>
+        <a href="https://metropolitane-grenzregionen.eu/metropolitane-grenzregionen/imeg-regionen/euregio-maas-rhein/">https://metropolitane-grenzregionen.eu/metropolitane-grenzregionen/imeg-regionen/euregio-maas-rhein/</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Aachen</div>
+        <a href="https://www.aachen.de/europa-internationales/euregio-maas-rhein/">https://www.aachen.de/europa-internationales/euregio-maas-rhein/</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Wikipedia</div>
+        <a href="https://de.wikipedia.org/wiki/Euregio-Maas-Rhein">https://de.wikipedia.org/wiki/Euregio-Maas-Rhein</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Euregio</div>
+        <a href="https://euregio-mr.info/de/ueber-uns/evtz/">https://euregio-mr.info/de/ueber-uns/evtz/</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Geografie</div>
+        <a href="https://vorschau-geografie.dilewe.de/inhalt/2-4-wetter-und-klima/index.html">https://vorschau-geografie.dilewe.de/inhalt/2-4-wetter-und-klima/index.html</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Wikipedia</div>
+        <a href="https://de.wikipedia.org/wiki/Geographie_Nordrhein-Westfalens">https://de.wikipedia.org/wiki/Geographie_Nordrhein-Westfalens</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Wikipedia</div>
+        <a href="https://de.wikipedia.org/wiki/Liste_von_Bergwerken_in_der_Eifel">https://de.wikipedia.org/wiki/Liste_von_Bergwerken_in_der_Eifel</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Industrie</div>
+        <a href="https://www.industriemuseen-emr.de/de_DE/oremining">https://www.industriemuseen-emr.de/de_DE/oremining</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Industrie</div>
+        <a href="https://www.industriemuseen-emr.de/de_DE/industrialization">https://www.industriemuseen-emr.de/de_DE/industrialization</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Industrie</div>
+        <a href="https://www.industriemuseen-emr.de/de_DE/coalmining">https://www.industriemuseen-emr.de/de_DE/coalmining</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Wandern</div>
+        <a href="https://www.aufmerksam-wandern.de/themen/thema_026.php">https://www.aufmerksam-wandern.de/themen/thema_026.php</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Heritage</div>
+        <a href="https://www.erih.net/i-want-to-go-there/site/regionalroute/euregio-meuse-rhine">https://www.erih.net/i-want-to-go-there/site/regionalroute/euregio-meuse-rhine</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Euregio</div>
+        <a href="https://euregio-mr.info/de/ueber-uns/organisation/">https://euregio-mr.info/de/ueber-uns/organisation/</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Wikipedia</div>
+        <a href="https://de.wikipedia.org/wiki/MAGMA">https://de.wikipedia.org/wiki/MAGMA</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Wikipedia</div>
+        <a href="https://en.wikipedia.org/wiki/Magma_(company)">https://en.wikipedia.org/wiki/Magma_(company)</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Wikipedia</div>
+        <a href="https://en.wikipedia.org/wiki/Brightlands_Chemelot_Campus">https://en.wikipedia.org/wiki/Brightlands_Chemelot_Campus</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Universität</div>
+        <a href="https://www.maastrichtuniversity.nl/news/ten-years-brightlands-chemelot-campus-limburgs-innovation-engine-global-challenges">https://www.maastrichtuniversity.nl/news/ten-years-brightlands-chemelot-campus-limburgs-innovation-engine-global-challenges</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Wikipedia</div>
+        <a href="https://en.wikipedia.org/wiki/Umicore">https://en.wikipedia.org/wiki/Umicore</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Euregio</div>
+        <a href="https://euregio-mr.info/de/themen/interessenvertretung-und-regionalvermarktung.php">https://euregio-mr.info/de/themen/interessenvertretung-und-regionalvermarktung.php</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Euregio</div>
+        <a href="https://euregio-mr.info/de/ueber-uns/europaeische-netzwerke/ageg.php">https://euregio-mr.info/de/ueber-uns/europaeische-netzwerke/ageg.php</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Wikipedia</div>
+        <a href="https://de.wikipedia.org/wiki/Arbeitsgemeinschaft_Europäischer_Grenzregionen">https://de.wikipedia.org/wiki/Arbeitsgemeinschaft_Europäischer_Grenzregionen</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Belgien</div>
+        <a href="https://pdg.be/desktopdefault.aspx/tabid-4070/">https://pdg.be/desktopdefault.aspx/tabid-4070/</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Wikipedia</div>
+        <a href="https://de.wikipedia.org/wiki/RWTH_Aachen">https://de.wikipedia.org/wiki/RWTH_Aachen</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">IHK Belgien</div>
+        <a href="https://www.aved-ihk.be/region/euregio-maas-rhein/">https://www.aved-ihk.be/region/euregio-maas-rhein/</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Verkehr</div>
+        <a href="https://avv.de/de/aktuelles/neuigkeiten/dreilaenderzug-startet-am-30-juni">https://avv.de/de/aktuelles/neuigkeiten/dreilaenderzug-startet-am-30-juni</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Fahrplan</div>
+        <a href="https://avv.de/files/avv/files/fahrplaene/linienfahrplaene/385_avv.pdf">https://avv.de/files/avv/files/fahrplaene/linienfahrplaene/385_avv.pdf</a>
+      </div>
+      
+      <div class="quelle">
+        <div class="domain-badge">Ticket</div>
+        <a href="https://avv.de/euregioticket">https://avv.de/euregioticket</a>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="image-sources-section">
+      <h1>Bild Quellen & Lizenzen</h1>
+      <div class="in-progress">In Progress</div>
+    </div>
+  </div>
 </body>
 </html>
