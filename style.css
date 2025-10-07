@@ -1,42 +1,378 @@
-h1 {
-    color: rgb(255, 255, 255) ;
-    font-size: 60px;
-    text-align: center;
-    font-weight: bold;
+/* CSS Custom Properties for Color Scheme */
+:root {
+    --color-primary: #000501;
+    --color-secondary: #73ab84;
+    --color-accent: #99d19c;
+    --color-light: #79c7c5;
+    --color-lightest: #ade1e5;
+
+    /* Light mode colors */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-card: #ffffff;
+    --text-primary: #000501;
+    --text-secondary: #4a5568;
+    --text-muted: #718096;
+    --border-color: #e2e8f0;
+    --shadow-color: rgba(0, 5, 1, 0.1);
+    --shadow-hover: rgba(0, 5, 1, 0.15);
 }
-p {
-    color: rgb(255, 255, 255);
-    text-align: center;
-    font-size: 30px;
+
+/* Dark mode colors */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-primary: #000501;
+        --bg-secondary: #1a1b1a;
+        --bg-card: #2d3338;
+        --text-primary: #ade1e5;
+        --text-secondary: #99d19c;
+        --text-muted: #79c7c5;
+        --border-color: #4a5568;
+        --shadow-color: rgba(173, 225, 229, 0.1);
+        --shadow-hover: rgba(173, 225, 229, 0.15);
+    }
 }
-body {
-    background-color: rgb(79, 79, 79);
-}
-button {
-  background-color: purple;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  width: 200px;
-  border-radius: 10px;
-  transition-duration: 0.4s;
-}
-button:hover {
-    box-shadow: 0 12px 16px 0 rgba(255, 255, 255, 0.24), 0 17px 50px 0 rgba(255, 255, 255, 0.19);
-  }
-.container {
-    display: flex; /* Enables CSS flexbox */
-    justify-content: center; /* Centers horizontally */
+
+/* Reset and Base Styles */
+* {
     margin: 0;
-    padding: 10px;
-    background-color: black;
- }
- .center {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
-  }
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header Styles */
+.header {
+    text-align: center;
+    padding: 60px 0 40px;
+    background: linear-gradient(
+        135deg,
+        var(--color-secondary),
+        var(--color-accent)
+    );
+    margin: -20px -20px 60px -20px;
+    border-radius: 0 0 20px 20px;
+}
+
+.main-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 300;
+}
+
+/* About Section */
+.about-section {
+    margin-bottom: 60px;
+}
+
+.about-content h2 {
+    font-size: 2rem;
+    color: var(--color-secondary);
+    margin-bottom: 30px;
+    text-align: center;
+    position: relative;
+}
+
+.about-content h2::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(
+        90deg,
+        var(--color-secondary),
+        var(--color-accent)
+    );
+    border-radius: 2px;
+}
+
+.about-text {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.about-text p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    line-height: 1.8;
+}
+
+/* Projects Section */
+.projects-section {
+    margin-bottom: 60px;
+    flex: 1;
+}
+
+.section-title {
+    font-size: 2rem;
+    color: var(--color-secondary);
+    margin-bottom: 40px;
+    text-align: center;
+    position: relative;
+}
+
+.section-title::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(
+        90deg,
+        var(--color-secondary),
+        var(--color-accent)
+    );
+    border-radius: 2px;
+}
+
+/* Projects Grid */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
+}
+
+/* Project Cards */
+.project-card {
+    background: var(--bg-card);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 15px var(--shadow-color);
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.project-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(
+        90deg,
+        var(--color-secondary),
+        var(--color-accent),
+        var(--color-light)
+    );
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px var(--shadow-hover);
+}
+
+.project-card:hover::before {
+    transform: scaleX(1);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.card-header h3 {
+    font-size: 1.4rem;
+    color: var(--color-secondary);
+    font-weight: 600;
+    margin: 0;
+}
+
+.github-link {
+    color: var(--text-muted);
+    font-size: 1.3rem;
+    transition: all 0.3s ease;
+    padding: 8px;
+    border-radius: 50%;
+    background: var(--bg-secondary);
+}
+
+.github-link:hover {
+    color: var(--color-secondary);
+    background: var(--color-lightest);
+    transform: scale(1.1);
+}
+
+.card-content p {
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+/* Tech Tags */
+.tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag {
+    background: linear-gradient(
+        135deg,
+        var(--color-light),
+        var(--color-lightest)
+    );
+    color: var(--color-primary);
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: transform 0.2s ease;
+}
+
+.tag:hover {
+    transform: scale(1.05);
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 40px 0;
+    border-top: 1px solid var(--border-color);
+    margin-top: auto;
+}
+
+.footer p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+
+    .header {
+        padding: 40px 0 30px;
+        margin: -15px -15px 40px -15px;
+    }
+
+    .main-title {
+        font-size: 2rem;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+    }
+
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .project-card {
+        padding: 20px;
+    }
+
+    .about-content h2,
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .about-text p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        margin: -15px -15px 30px -15px;
+    }
+
+    .main-title {
+        font-size: 1.8rem;
+    }
+
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .github-link {
+        align-self: flex-end;
+    }
+}
+
+/* Accessibility Improvements */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus Styles for Keyboard Navigation */
+.project-card:focus,
+.github-link:focus {
+    outline: 2px solid var(--color-secondary);
+    outline-offset: 2px;
+}
+
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Print Styles */
+@media print {
+    .header {
+        background: none !important;
+        color: black !important;
+    }
+
+    .project-card {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+        break-inside: avoid;
+    }
+
+    .github-link {
+        display: none;
+    }
+}
