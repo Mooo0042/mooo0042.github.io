@@ -1,0 +1,28 @@
+{
+  "repo": {
+    "name": "SmartTubeNext",
+    "description": "External STN repo",
+    "icon": "icon.png",
+    "address": "."
+  },
+  "apps": [
+    {
+      "packageName": "smarttubenext",
+      "suggestedVersionName": "latest",
+      "suggestedVersionCode": 1
+    }
+  ],
+  "packages": {
+    "smarttubenext": [
+      {
+        "apkName": "smarttube_stable.apk",
+        "versionName": "latest",
+        "versionCode": 1,
+        "hash": "",
+        "hashType": "sha256",
+        "downloadUrl": "https://github.com/yuliskov/SmartTubeNext/releases/download/latest/smarttube_stable.apk",
+        "size": 0
+      }
+    ]
+  }
+}
