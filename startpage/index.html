@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .search-container {
+            margin-bottom: 60px;
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 18px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 50px;
+            background: rgba(30, 30, 46, 0.9);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+            color: #e0e0e0;
+        }
+
+        .search-box input::placeholder {
+            color: #888;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            background: rgba(40, 40, 56, 0.95);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
+        }
+
+        .links-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .link-card {
+            background: rgba(30, 30, 46, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            background: rgba(40, 40, 56, 0.95);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .favicon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .favicon img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .link-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .link-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #e0e0e0;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .link-description {
+            font-size: 14px;
+            color: #888;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .instructions {
+            background: rgba(30, 30, 46, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .instructions h2 {
+            color: #e0e0e0;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .instructions p {
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .instructions code {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #f87171;
+        }
+
+        .offline-warning {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(239, 68, 68, 0.95);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            display: none;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            animation: slideIn 0.3s ease;
+        }
+
+        .offline-warning.show {
+            display: flex;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="search-container">
+            <form class="search-box" action="https://www.google.com/search" method="get">
+                <input type="text" name="q" placeholder="Search Google..." autocomplete="off">
+            </form>
+        </div>
+
+        <div class="instructions">
+            <h2>📝 How to Configure Your Links</h2>
+            <p>Create a file named <code>links.txt</code> in the same folder as this HTML file.</p>
+            <p>Each line should follow this format:</p>
+            <p><code>URL | Title | Description</code></p>
+            <p>Example:</p>
+            <p><code>https://github.com | GitHub | Code repository and collaboration</code></p>
+        </div>
+
+        <div class="links-container" id="linksContainer">
+            <!-- Demo links - these will be replaced when you add your links.txt file -->
+            <a href="https://github.com" class="link-card">
+                <div class="favicon">
+                    <img src="https://github.com/favicon.ico" alt="GitHub">
+                </div>
+                <div class="link-content">
+                    <div class="link-title">GitHub</div>
+                    <div class="link-description">Code repository and collaboration</div>
+                </div>
+            </a>
+
+            <a href="https://youtube.com" class="link-card">
+                <div class="favicon">
+                    <img src="https://youtube.com/favicon.ico" alt="YouTube">
+                </div>
+                <div class="link-content">
+                    <div class="link-title">YouTube</div>
+                    <div class="link-description">Watch videos and streams</div>
+                </div>
+            </a>
+
+            <a href="https://reddit.com" class="link-card">
+                <div class="favicon">
+                    <img src="https://reddit.com/favicon.ico" alt="Reddit">
+                </div>
+                <div class="link-content">
+                    <div class="link-title">Reddit</div>
+                    <div class="link-description">Social news and discussion</div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="offline-warning" id="offlineWarning">
+        <span>⚠️</span>
+        <span>No internet connection</span>
+    </div>
+
+    <script>
+        // Function to get favicon URL with fallback using Google's favicon service
+        function getFaviconUrl(url) {
+            try {
+                const domain = new URL(url).hostname;
+                // Use Google's favicon service as it bypasses CORS issues
+                return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+            } catch (error) {
+                return 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Ctext y=%2218%22 font-size=%2218%22%3E🌐%3C/text%3E%3C/svg%3E';
+            }
+        }
+
+        // Online/Offline detection
+        function updateOnlineStatus() {
+            const warning = document.getElementById('offlineWarning');
+            if (!navigator.onLine) {
+                warning.classList.add('show');
+            } else {
+                warning.classList.remove('show');
+            }
+        }
+
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+
+        // Function to load links from links.txt file
+        async function loadLinks() {
+            try {
+                const response = await fetch('links.txt');
+                const text = await response.text();
+                
+                if (text.trim()) {
+                    const lines = text.trim().split('\n').filter(line => line.trim());
+                    const container = document.getElementById('linksContainer');
+                    const instructions = document.querySelector('.instructions');
+                    
+                    // Hide instructions if we have valid links
+                    if (lines.length > 0 && lines[0].includes('|')) {
+                        instructions.style.display = 'none';
+                    }
+                    
+                    container.innerHTML = '';
+                    
+                    lines.forEach(async line => {
+                        const parts = line.split('|').map(s => s.trim());
+                        if (parts.length >= 2) {
+                            const url = parts[0];
+                            const title = parts[1];
+                            const description = parts[2] || '';
+                            
+                            const faviconUrl = getFaviconUrl(url);
+                            
+                            const card = document.createElement('a');
+                            card.className = 'link-card';
+                            card.href = url;
+                            card.target = '_blank';
+                            card.rel = 'noopener noreferrer';
+                            
+                            card.innerHTML = `
+                                <div class="favicon">
+                                    <img src="${faviconUrl}" alt="${title}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Ctext y=%2218%22 font-size=%2218%22%3E🌐%3C/text%3E%3C/svg%3E'">
+                                </div>
+                                <div class="link-content">
+                                    <div class="link-title">${title}</div>
+                                    ${description ? `<div class="link-description">${description}</div>` : ''}
+                                </div>
+                            `;
+                            
+                            container.appendChild(card);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.log('No links.txt file found. Using demo links.');
+            }
+        }
+
+        // Load links when page loads
+        loadLinks();
+        
+        // Check online status on load
+        updateOnlineStatus();
+
+        // Auto-focus search bar when typing
+        const searchInput = document.querySelector('.search-box input');
+        
+        document.addEventListener('keydown', (e) => {
+            // Don't focus if already focused or if pressing modifier keys
+            if (document.activeElement === searchInput) return;
+            if (e.ctrlKey || e.metaKey || e.altKey) return;
+            
+            // Focus on any printable character
+            if (e.key.length === 1) {
+                searchInput.focus();
+            }
+        });
+    </script>
+</body>
+</html>
