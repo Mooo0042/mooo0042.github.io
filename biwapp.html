@@ -1,0 +1,21 @@
+<html>
+<body>
+<div id="BiwappWidget"></div> 
+<script> 
+    (function() { 
+        window.BiwappWidget = "biwapp", 
+        "biwapp" in window || (window.biwapp = function() { 
+        window.biwapp.q.push(arguments) 
+        }, window.biwapp.q = []), 
+        window.biwapp.areaToUse = "heidekreis"; 
+        window.biwapp.containingDivId = "BiwappWidget"; 
+        window.biwapp.width = "340"; 
+        window.biwapp.height = "360"; 
+        var o = document.createElement("script"); 
+        o.src = "//www.biwapp.de/widget/biwapp.js", o.async = !0; 
+        var n = document.getElementsByTagName("script")[0]; 
+        n.parentNode.insertBefore(o, n); 
+    })(); 
+</script> 
+</body>
+</html>
