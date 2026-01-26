@@ -1,6 +1,30 @@
 <html>
 <head>
     <title>BIWAPP</title>
+    <style>
+        /* Dark mode for the entire page */
+        body {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        
+        /* Dark mode styling for the BIWAPP widget container */
+        #BiwappWidget {
+            background-color: #2d2d2d;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Attempt to style iframe content if possible */
+        #BiwappWidget iframe {
+            border-radius: 8px;
+            filter: invert(0.9) hue-rotate(180deg);
+        }
+    </style>
 </head>
 <body>
 <div id="BiwappWidget"></div> 
