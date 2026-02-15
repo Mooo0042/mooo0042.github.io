@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CircuitCraft – Visual Microcontroller Programming</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Fira+Code:wght@400;500&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Fira Code', monospace;
+            background: #0a0e1a;
+            color: #e5e7eb;
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Mesh Background */
+        .mesh-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .mesh-background canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Language Toggle */
+        .lang-toggle {
+            position: fixed; top: 2rem; right: 2rem; z-index: 1000;
+            background: #1a2332; padding: 0.5rem; border-radius: 12px;
+            border: 1px solid #2d3748; display: flex; gap: 0.5rem;
+            box-shadow: 0 4px 20px rgba(0, 217, 255, 0.1);
+        }
+
+        .lang-btn {
+            background: transparent; border: none; color: #9ca3af;
+            padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;
+            font-family: 'Fira Code', monospace; font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(135deg, #00d9ff, #7c3aed, #00ffaa);
+            color: white;
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.4);
+        }
+
+        .lang-btn:hover:not(.active) {
+            color: #00d9ff;
+            background: rgba(0, 217, 255, 0.1);
+        }
+
+        .lang-section { display: none; }
+        .lang-section.active { display: block; }
+
+        /* Header */
+        .header { text-align: center; padding: 4rem 0 2rem; position: relative; }
+
+        .circuit-icon {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            animation: pulse 3s ease-in-out infinite;
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+        }
+
+        .circuit-icon svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 20px rgba(0, 217, 255, 0.5));
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+        }
+
+        .main-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00d9ff 0%, #7c3aed 50%, #00ffaa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #9ca3af;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .cta-btn {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-weight: 500;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .cta-btn.primary {
+            background: linear-gradient(135deg, #00d9ff, #7c3aed);
+            color: white;
+            box-shadow: 0 4px 20px rgba(0, 217, 255, 0.3);
+        }
+
+        .cta-btn.primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 217, 255, 0.5);
+        }
+
+        .cta-btn.secondary {
+            background: #1a2332;
+            color: #e5e7eb;
+            border: 2px solid #00d9ff;
+        }
+
+        .cta-btn.secondary:hover {
+            background: rgba(0, 217, 255, 0.1);
+            border-color: #00ffaa;
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+        }
+
+        /* Status Banner */
+        .status-banner {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(0, 217, 255, 0.2));
+            border: 2px solid #7c3aed;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .status-banner h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: #00ffaa;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-banner p {
+            color: #9ca3af;
+            font-size: 1rem;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            text-align: center;
+            margin: 3rem 0 2rem;
+            color: #00d9ff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            background: #1a2332;
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid #2d3748;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: #00d9ff;
+            box-shadow: 0 10px 40px rgba(0, 217, 255, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .feature-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #e5e7eb;
+        }
+
+        .feature-card p {
+            color: #9ca3af;
+            line-height: 1.8;
+        }
+
+        /* Hardware Section */
+        .hardware-section {
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .hardware-grid {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .hardware-item {
+            background: #1a2332;
+            padding: 2rem;
+            border-radius: 16px;
+            border: 2px solid #2d3748;
+            transition: all 0.3s ease;
+            min-width: 180px;
+        }
+
+        .hardware-item:hover {
+            border-color: #00d9ff;
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .hardware-icon {
+            font-size: 3rem;
+            color: #00d9ff;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .hardware-item h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: #e5e7eb;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 1px solid #2d3748;
+            margin-top: 4rem;
+            color: #9ca3af;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: #00d9ff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .footer-link:hover {
+            color: #00ffaa;
+            text-shadow: 0 0 10px rgba(0, 255, 170, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-title { font-size: 2.5rem; }
+            .subtitle { font-size: 1rem; }
+            .lang-toggle { top: 1rem; right: 1rem; }
+            .features-grid { grid-template-columns: 1fr; }
+            .hardware-grid { gap: 1.5rem; }
+            .section-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Mesh Background -->
+    <div class="mesh-background">
+        <canvas id="meshCanvas"></canvas>
+    </div>
+
+    <div class="container">
+        <!-- Language Toggle -->
+        <div class="lang-toggle">
+            <button class="lang-btn active" onclick="switchLanguage('en')">EN</button>
+            <button class="lang-btn" onclick="switchLanguage('de')">DE</button>
+        </div>
+
+        <!-- ENGLISH VERSION -->
+        <div id="content-en" class="lang-section active">
+            <!-- Header -->
+            <header class="header">
+                <div class="circuit-icon">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Chip body -->
+                        <rect x="20" y="20" width="60" height="60" rx="4" fill="url(#chipGradient)" stroke="#00d9ff" stroke-width="2"/>
+                        
+                        <!-- Circuit lines inside -->
+                        <line x1="35" y1="35" x2="65" y2="35" stroke="#00ffaa" stroke-width="1.5" opacity="0.8"/>
+                        <line x1="35" y1="45" x2="65" y2="45" stroke="#7c3aed" stroke-width="1.5" opacity="0.8"/>
+                        <line x1="35" y1="55" x2="65" y2="55" stroke="#00d9ff" stroke-width="1.5" opacity="0.8"/>
+                        <line x1="35" y1="65" x2="65" y2="65" stroke="#00ffaa" stroke-width="1.5" opacity="0.8"/>
+                        
+                        <line x1="35" y1="35" x2="35" y2="65" stroke="#7c3aed" stroke-width="1.5" opacity="0.8"/>
+                        <line x1="50" y1="35" x2="50" y2="65" stroke="#00d9ff" stroke-width="1.5" opacity="0.8"/>
+                        <line x1="65" y1="35" x2="65" y2="65" stroke="#00ffaa" stroke-width="1.5" opacity="0.8"/>
+                        
+                        <!-- Pins on sides -->
+                        <!-- Left pins -->
+                        <rect x="10" y="25" width="10" height="4" fill="#00d9ff"/>
+                        <rect x="10" y="38" width="10" height="4" fill="#00d9ff"/>
+                        <rect x="10" y="51" width="10" height="4" fill="#00d9ff"/>
+                        <rect x="10" y="64" width="10" height="4" fill="#00d9ff"/>
+                        
+                        <!-- Right pins -->
+                        <rect x="80" y="25" width="10" height="4" fill="#00d9ff"/>
+                        <rect x="80" y="38" width="10" height="4" fill="#00d9ff"/>
+                        <rect x="80" y="51" width="10" height="4" fill="#00d9ff"/>
+                        <rect x="80" y="64" width="10" height="4" fill="#00d9ff"/>
+                        
+                        <!-- Top pins -->
+                        <rect x="25" y="10" width="4" height="10" fill="#00d9ff"/>
+                        <rect x="38" y="10" width="4" height="10" fill="#00d9ff"/>
+                        <rect x="51" y="10" width="4" height="10" fill="#00d9ff"/>
+                        <rect x="64" y="10" width="4" height="10" fill="#00d9ff"/>
+                        
+                        <!-- Bottom pins -->
+                        <rect x="25" y="80" width="4" height="10" fill="#00d9ff"/>
+                        <rect x="38" y="80" width="4" height="10" fill="#00d9ff"/>
+                        <rect x="51" y="80" width="4" height="10" fill="#00d9ff"/>
+                        <rect x="64" y="80" width="4" height="10" fill="#00d9ff"/>
+                        
+                        <!-- Center dot -->
+                        <circle cx="50" cy="50" r="3" fill="#00ffaa"/>
+                        
+                        <!-- Gradient definition -->
+                        <defs>
+                            <linearGradient id="chipGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#1a2332;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#0a0e1a;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h1 class="main-title">CircuitCraft</h1>
+                <p class="subtitle">Visual Microcontroller Programming Made Simple</p>
+                <div class="cta-buttons">
+                    <a href="https://codeberg.org/Fr4gm3nt3d_sh/CircuitCraft/releases" class="cta-btn primary">
+                        ↓ Download
+                    </a>
+                    <a href="https://codeberg.org/Fr4gm3nt3d_sh/CircuitCraft" class="cta-btn secondary">
+                        → View on Codeberg
+                    </a>
+                </div>
+            </header>
+
+            <!-- Status Banner -->
+            <div class="status-banner">
+                <h3>🔨 Work in Progress</h3>
+                <p>CircuitCraft is currently under active development. Stay tuned for updates!</p>
+            </div>
+
+            <!-- Features Section -->
+            <section class="features-section">
+                <h2 class="section-title">Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🔌</div>
+                        <h3>Visual Circuit Design</h3>
+                        <p>Drag-and-drop interface for connecting components to microcontroller pins. Real-time visualization of signal flow and logic states.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Logic Gates & Control</h3>
+                        <p>Built-in logic gates (AND, OR, NOT, XOR, NAND, NOR) with conditional branching based on input states.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⏱️</div>
+                        <h3>Timing & Delays</h3>
+                        <p>Visual timeline for scheduling actions with configurable delays, timeouts, and PWM signal generation.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📝</div>
+                        <h3>Code Generation</h3>
+                        <p>Export to native MicroPython code and flash directly to connected devices.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🏭</div>
+                        <h3>Professional Use</h3>
+                        <p>Perfect for industrial automation, access control systems, and IoT prototyping.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎓</div>
+                        <h3>Educational</h3>
+                        <p>Teach embedded systems concepts through intuitive visual programming.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Hardware Support -->
+            <section class="hardware-section">
+                <h2 class="section-title">Supported Hardware</h2>
+                <div class="hardware-grid">
+                    <div class="hardware-item">
+                        <div class="hardware-icon">🔧</div>
+                        <h4>ESP8266 / ESP32</h4>
+                    </div>
+                    <div class="hardware-item">
+                        <div class="hardware-icon">⚙️</div>
+                        <h4>Arduino</h4>
+                    </div>
+                    <div class="hardware-item">
+                        <div class="hardware-icon">🥧</div>
+                        <h4>Raspberry Pi Pico</h4>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="footer-links">
+                    <a href="https://codeberg.org/Fr4gm3nt3d_sh/CircuitCraft" class="footer-link">
+                        → Codeberg
+                    </a>
+                    <a href="https://codeberg.org/Fr4gm3nt3d_sh/CircuitCraft/issues" class="footer-link">
+                        🐛 Issues
+                    </a>
+                    <a href="https://codeberg.org/Fr4gm3nt3d_sh/CircuitCraft/src/branch/main/LICENSE" class="footer-link">
+                        📜 License
+                    </a>
+                </div>
+                <p>&copy; 2025 Moritz Breier. All rights reserved.</p>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+                    Built with ♥ using Rust & Tauri
+                </p>
+            </footer>
+        </div>
+
+        <!-- GERMAN VERSION -->
+        <div id="content-de" class="lang-section">
+            <!-- Header -->
+            <header class="header">
+                <div class="circuit-icon">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Chip body -->
+                        <rect x="20" y="20" width="60" height="60" rx="4" fill="url(#chipGradient2)" stroke="#00d9ff" stroke-width="2"/>
+                        
+                        <!-- Circuit lines inside -->
+                        <line x1="35" y1="35" x2="65" y2="35" stroke="#00ffaa" stroke-width="1.5" opacity="0.8"/>
+                        <line x1="35" y1="45" x2="65" y2="45" stroke="#7c3aed" stroke-width="1.5" opacity="0.8"/>
+                        <line x1="35" y1="55" x2="65" y2="55" stroke="#00d9ff" stroke-width="1.5" opacity="0.8"/>
+                        <line x1="35" y1="65" x2="65" y2="65" stroke="#00ffaa" stroke-width="1.5" opacity="0.8"/>
+                        
+                        <line x1="35" y1="35" x2="35" y2="65" stroke="#7c3aed" stroke-width="1.5" opacity="0.8"/>
+                        <line x1="50" y1="35" x2="50" y2="65" stroke="#00d9ff" stroke-width="1.5" opacity="0.8"/>
+                        <line x1="65" y1="35" x2="65" y2="65" stroke="#00ffaa" stroke-width="1.5" opacity="0.8"/>
+                        
+                        <!-- Pins on sides -->
+                        <!-- Left pins -->
+                        <rect x="10" y="25" width="10" height="4" fill="#00d9ff"/>
+                        <rect x="10" y="38" width="10" height="4" fill="#00d9ff"/>
+                        <rect x="10" y="51" width="10" height="4" fill="#00d9ff"/>
+                        <rect x="10" y="64" width="10" height="4" fill="#00d9ff"/>
+                        
+                        <!-- Right pins -->
+                        <rect x="80" y="25" width="10" height="4" fill="#00d9ff"/>
+                        <rect x="80" y="38" width="10" height="4" fill="#00d9ff"/>
+                        <rect x="80" y="51" width="10" height="4" fill="#00d9ff"/>
+                        <rect x="80" y="64" width="10" height="4" fill="#00d9ff"/>
+                        
+                        <!-- Top pins -->
+                        <rect x="25" y="10" width="4" height="10" fill="#00d9ff"/>
+                        <rect x="38" y="10" width="4" height="10" fill="#00d9ff"/>
+                        <rect x="51" y="10" width="4" height="10" fill="#00d9ff"/>
+                        <rect x="64" y="10" width="4" height="10" fill="#00d9ff"/>
+                        
+                        <!-- Bottom pins -->
+                        <rect x="25" y="80" width="4" height="10" fill="#00d9ff"/>
+                        <rect x="38" y="80" width="4" height="10" fill="#00d9ff"/>
+                        <rect x="51" y="80" width="4" height="10" fill="#00d9ff"/>
+                        <rect x="64" y="80" width="4" height="10" fill="#00d9ff"/>
+                        
+                        <!-- Center dot -->
+                        <circle cx="50" cy="50" r="3" fill="#00ffaa"/>
+                        
+                        <!-- Gradient definition -->
+                        <defs>
+                            <linearGradient id="chipGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#1a2332;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#0a0e1a;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h1 class="main-title">CircuitCraft</h1>
+                <p class="subtitle">Visuelle Mikrocontroller-Programmierung Leicht Gemacht</p>
+                <div class="cta-buttons">
+                    <a href="https://codeberg.org/Fr4gm3nt3d_sh/CircuitCraft/releases" class="cta-btn primary">
+                        ↓ Herunterladen
+                    </a>
+                    <a href="https://codeberg.org/Fr4gm3nt3d_sh/CircuitCraft" class="cta-btn secondary">
+                        → Auf Codeberg ansehen
+                    </a>
+                </div>
+            </header>
+
+            <!-- Status Banner -->
+            <div class="status-banner">
+                <h3>🔨 In Entwicklung</h3>
+                <p>CircuitCraft befindet sich derzeit in aktiver Entwicklung. Bleiben Sie dran!</p>
+            </div>
+
+            <!-- Features Section -->
+            <section class="features-section">
+                <h2 class="section-title">Funktionen</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🔌</div>
+                        <h3>Visuelles Schaltungsdesign</h3>
+                        <p>Drag-and-Drop-Oberfläche zum Verbinden von Komponenten mit Mikrocontroller-Pins. Echtzeit-Visualisierung von Signalfluss und Logikzuständen.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Logikgatter & Steuerung</h3>
+                        <p>Integrierte Logikgatter (AND, OR, NOT, XOR, NAND, NOR) mit bedingter Verzweigung basierend auf Eingangszuständen.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⏱️</div>
+                        <h3>Zeitsteuerung & Verzögerungen</h3>
+                        <p>Visuelle Zeitleiste zum Planen von Aktionen mit konfigurierbaren Verzögerungen, Timeouts und PWM-Signalerzeugung.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📝</div>
+                        <h3>Code-Generierung</h3>
+                        <p>Export in nativen MicroPython-Code und direktes Flashen auf verbundene Geräte.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🏭</div>
+                        <h3>Professioneller Einsatz</h3>
+                        <p>Perfekt für industrielle Automatisierung, Zugangskontrollsysteme und IoT-Prototyping.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎓</div>
+                        <h3>Bildung</h3>
+                        <p>Vermitteln Sie Konzepte eingebetteter Systeme durch intuitive visuelle Programmierung.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Hardware Support -->
+            <section class="hardware-section">
+                <h2 class="section-title">Unterstützte Hardware</h2>
+                <div class="hardware-grid">
+                    <div class="hardware-item">
+                        <div class="hardware-icon">🔧</div>
+                        <h4>ESP8266 / ESP32</h4>
+                    </div>
+                    <div class="hardware-item">
+                        <div class="hardware-icon">⚙️</div>
+                        <h4>Arduino</h4>
+                    </div>
+                    <div class="hardware-item">
+                        <div class="hardware-icon">🥧</div>
+                        <h4>Raspberry Pi Pico</h4>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="footer-links">
+                    <a href="https://codeberg.org/Fr4gm3nt3d_sh/CircuitCraft" class="footer-link">
+                        → Codeberg
+                    </a>
+                    <a href="https://codeberg.org/Fr4gm3nt3d_sh/CircuitCraft/issues" class="footer-link">
+                        🐛 Probleme
+                    </a>
+                    <a href="https://codeberg.org/Fr4gm3nt3d_sh/CircuitCraft/src/branch/main/LICENSE" class="footer-link">
+                        📜 Lizenz
+                    </a>
+                </div>
+                <p>&copy; 2025 Moritz Breier. Alle Rechte vorbehalten.</p>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+                    Entwickelt mit ♥ mit Rust & Tauri
+                </p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // Language Switcher
+        function switchLanguage(lang) {
+            document.querySelectorAll('.lang-section').forEach(s => s.classList.remove('active'));
+            document.getElementById('content-' + lang).classList.add('active');
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            document.documentElement.lang = lang;
+            localStorage.setItem('circuitcraft-lang', lang);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('circuitcraft-lang');
+            if (saved === 'de') document.querySelectorAll('.lang-btn')[1].click();
+        });
+
+        // Animated Mesh Background
+        const canvas = document.getElementById('meshCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Create mesh grid points
+        const gridSize = 60;
+        const points = [];
+        const cols = Math.ceil(canvas.width / gridSize) + 1;
+        const rows = Math.ceil(canvas.height / gridSize) + 1;
+
+        for (let y = 0; y < rows; y++) {
+            for (let x = 0; x < cols; x++) {
+                points.push({
+                    x: x * gridSize,
+                    y: y * gridSize,
+                    originalX: x * gridSize,
+                    originalY: y * gridSize,
+                    vx: (Math.random() - 0.5) * 0.3,
+                    vy: (Math.random() - 0.5) * 0.3
+                });
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Update and draw points
+            points.forEach((point, i) => {
+                // Wave motion
+                const time = Date.now() * 0.001;
+                point.x = point.originalX + Math.sin(time + point.originalY * 0.01) * 15;
+                point.y = point.originalY + Math.cos(time + point.originalX * 0.01) * 15;
+
+                // Draw connections
+                points.forEach((otherPoint, j) => {
+                    if (i < j) {
+                        const dx = point.x - otherPoint.x;
+                        const dy = point.y - otherPoint.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < gridSize * 1.5) {
+                            const opacity = (1 - distance / (gridSize * 1.5)) * 0.15;
+                            ctx.strokeStyle = `rgba(0, 217, 255, ${opacity})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.beginPath();
+                            ctx.moveTo(point.x, point.y);
+                            ctx.lineTo(otherPoint.x, otherPoint.y);
+                            ctx.stroke();
+                        }
+                    }
+                });
+
+                // Draw point
+                ctx.fillStyle = 'rgba(0, 217, 255, 0.3)';
+                ctx.beginPath();
+                ctx.arc(point.x, point.y, 1.5, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
