@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timestamp Offset Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #eaeaea;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #ffd700, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #a0a0a0;
+            font-size: 1.1rem;
+        }
+
+        .tool-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tool-section h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ffd700;
+            font-weight: 600;
+        }
+
+        input[type="number"], textarea, select {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            font-size: 1rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .offset-input {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .offset-input input[type="number"] {
+            flex: 1;
+        }
+
+        .unit-select {
+            width: 120px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ffd700, #ff8c00);
+            color: #1a1a2e;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+            font-weight: 700;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .results-section {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffd700;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .output-area {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .button-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .error-message {
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .success-message {
+            background: rgba(46, 204, 113, 0.2);
+            border: 1px solid #2ecc71;
+            color: #2ecc71;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .help-text {
+            color: #888;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .mode-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .mode-btn.active {
+            background: #ffd700;
+            color: #1a1a2e;
+            font-weight: 700;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ffd700;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⏱️ Timestamp Offset Tool</h1>
+            <p class="subtitle">Add or subtract time from all timestamps</p>
+        </header>
+
+        <div class="tool-section">
+            <h3>📝 Input Timestamps</h3>
+            <p class="help-text">Paste one timestamp per line (in milliseconds)</p>
+            <textarea id="inputTimestamps" placeholder="22935
+23152
+29891
+30109..."></textarea>
+        </div>
+
+        <div class="tool-section">
+            <h3>⚙️ Offset Settings</h3>
+
+            <div class="mode-toggle">
+                <button class="mode-btn active" onclick="setMode('subtract')" id="btnSubtract">➖ Subtract</button>
+                <button class="mode-btn" onclick="setMode('add')" id="btnAdd">➕ Add</button>
+            </div>
+
+            <div class="input-group">
+                <label>Amount</label>
+                <div class="offset-input">
+                    <input type="number" id="offsetAmount" value="0" step="any">
+                    <select id="offsetUnit" class="unit-select">
+                        <option value="ms">ms</option>
+                        <option value="s">seconds</option>
+                        <option value="m">minutes</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="button-row">
+                <button class="btn" onclick="applyOffset()">Apply Offset</button>
+                <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+            </div>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+        <div class="success-message" id="successMessage"></div>
+
+        <div class="results-section" id="results">
+            <h3 style="color: #ffd700; margin-bottom: 15px;">📊 Results</h3>
+
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="inputCount">0</div>
+                    <div class="stat-label">Input Count</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="outputCount">0</div>
+                    <div class="stat-label">Output Count</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="minValue">0</div>
+                    <div class="stat-label">Min Value</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="maxValue">0</div>
+                    <div class="stat-label">Max Value</div>
+                </div>
+            </div>
+
+            <p class="help-text">Negative values were filtered out (set to 0 if you want to keep them)</p>
+
+            <h4 style="margin-bottom: 10px; color: #ffd700;">Output Timestamps:</h4>
+            <div class="output-area" id="outputArea"></div>
+
+            <div class="button-row">
+                <button class="btn" onclick="copyOutput()">📋 Copy to Clipboard</button>
+                <button class="btn" onclick="downloadOutput()">💾 Download as TXT</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = 'subtract';
+        let outputTimestamps = [];
+
+        function setMode(mode) {
+            currentMode = mode;
+            document.getElementById('btnSubtract').classList.toggle('active', mode === 'subtract');
+            document.getElementById('btnAdd').classList.toggle('active', mode === 'add');
+        }
+
+        function applyOffset() {
+            const input = document.getElementById('inputTimestamps').value.trim();
+            const amount = parseFloat(document.getElementById('offsetAmount').value) || 0;
+            const unit = document.getElementById('offsetUnit').value;
+
+            if (!input) {
+                showError('Please enter timestamps');
+                return;
+            }
+
+            // Convert to milliseconds
+            let offsetMs = amount;
+            if (unit === 's') offsetMs = amount * 1000;
+            if (unit === 'm') offsetMs = amount * 60000;
+
+            // Parse timestamps
+            const lines = input.split('\n');
+            const timestamps = [];
+
+            for (const line of lines) {
+                const trimmed = line.trim();
+                if (!trimmed) continue;
+
+                // Try to extract number from line (handles "22935ms", "22935", etc.)
+                const match = trimmed.match(/(-?\d+(?:\.\d+)?)/);
+                if (match) {
+                    const val = parseFloat(match[1]);
+                    if (!isNaN(val)) {
+                        timestamps.push(val);
+                    }
+                }
+            }
+
+            if (timestamps.length === 0) {
+                showError('No valid timestamps found');
+                return;
+            }
+
+            // Apply offset
+            outputTimestamps = timestamps.map(t => {
+                if (currentMode === 'subtract') {
+                    return t - offsetMs;
+                } else {
+                    return t + offsetMs;
+                }
+            });
+
+            // Filter out negative values (optional - change to keep them if needed)
+            const negativeCount = outputTimestamps.filter(t => t < 0).length;
+            outputTimestamps = outputTimestamps.filter(t => t >= 0);
+
+            // Update stats
+            document.getElementById('inputCount').textContent = timestamps.length;
+            document.getElementById('outputCount').textContent = outputTimestamps.length;
+            document.getElementById('minValue').textContent = Math.round(Math.min(...outputTimestamps));
+            document.getElementById('maxValue').textContent = Math.round(Math.max(...outputTimestamps));
+
+            // Display output
+            document.getElementById('outputArea').textContent = outputTimestamps.map(t => Math.round(t)).join('\n');
+            document.getElementById('results').style.display = 'block';
+
+            // Show success
+            const action = currentMode === 'subtract' ? 'Subtracted' : 'Added';
+            let msg = `✅ ${action} ${amount}${unit} from ${timestamps.length} timestamps`;
+            if (negativeCount > 0) {
+                msg += ` (${negativeCount} negative values removed)`;
+            }
+            showSuccess(msg);
+        }
+
+        function clearAll() {
+            document.getElementById('inputTimestamps').value = '';
+            document.getElementById('offsetAmount').value = '0';
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+            outputTimestamps = [];
+        }
+
+        function showError(msg) {
+            document.getElementById('errorMessage').textContent = '❌ ' + msg;
+            document.getElementById('errorMessage').style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        function showSuccess(msg) {
+            document.getElementById('successMessage').textContent = msg;
+            document.getElementById('successMessage').style.display = 'block';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        function copyOutput() {
+            const text = outputTimestamps.map(t => Math.round(t)).join('\n');
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard!');
+            });
+        }
+
+        function downloadOutput() {
+            const text = outputTimestamps.map(t => Math.round(t)).join('\n');
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'adjusted_timestamps.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

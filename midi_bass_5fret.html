@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Bass → 5 Fret Converter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #eaeaea;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #e94560, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #a0a0a0;
+            font-size: 1.1rem;
+        }
+
+        .upload-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed #e94560;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-section:hover {
+            background: rgba(233, 69, 96, 0.1);
+            border-color: #ff6b6b;
+            transform: translateY(-2px);
+        }
+
+        .upload-section.dragover {
+            background: rgba(233, 69, 96, 0.2);
+            border-color: #ff6b6b;
+            transform: scale(1.02);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #e94560, #ff6b6b);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(233, 69, 96, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .options {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .option-group {
+            margin-bottom: 20px;
+        }
+
+        .option-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #e94560;
+            font-weight: 600;
+        }
+
+        select, input[type="number"] {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .mapping-info {
+            background: rgba(0, 200, 83, 0.1);
+            border-left: 4px solid #00c853;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-bottom: 20px;
+            color: #b0b0b0;
+        }
+
+        .mapping-info strong {
+            color: #00c853;
+        }
+
+        .results-section {
+            display: none;
+        }
+
+        .track-info {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #e94560;
+            padding: 20px;
+            border-radius: 0 15px 15px 0;
+            margin-bottom: 20px;
+        }
+
+        .frets-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .fret-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .fret-header {
+            padding: 15px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .fret-0 { background: linear-gradient(135deg, #00c853, #00e676); }
+        .fret-1 { background: linear-gradient(135deg, #ff1744, #f50057); }
+        .fret-2 { background: linear-gradient(135deg, #ffea00, #ffd600); color: #333; }
+        .fret-3 { background: linear-gradient(135deg, #2979ff, #2962ff); }
+        .fret-4 { background: linear-gradient(135deg, #ff9100, #ff6d00); }
+
+        .note-range {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .note-count {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .fret-content {
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .timestamp-list {
+            list-style: none;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+        }
+
+        .timestamp-list li {
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .note-name {
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        .export-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .export-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .error-message {
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .success-message {
+            background: rgba(46, 204, 113, 0.2);
+            border: 1px solid #2ecc71;
+            color: #2ecc71;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-left-color: #e94560;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #e94560;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎸 MIDI Bass → 5 Fret Converter</h1>
+            <p class="subtitle">Map bass notes to 5 buttons (Green to Orange) by pitch</p>
+        </header>
+
+        <div class="mapping-info">
+            <strong>🎵 Mapping Logic:</strong><br>
+            Lowest pitch notes → <strong>GREEN (Fret 0)</strong><br>
+            Low-mid notes → <strong>RED (Fret 1)</strong><br>
+            Mid notes → <strong>YELLOW (Fret 2)</strong><br>
+            High-mid notes → <strong>BLUE (Fret 3)</strong><br>
+            Highest notes → <strong>ORANGE (Fret 4)</strong>
+        </div>
+
+        <div class="options">
+            <h3 style="margin-bottom: 20px; color: #e94560;">⚙️ Configuration</h3>
+
+            <div class="option-group">
+                <label>Bass Detection Method</label>
+                <select id="detectionMethod">
+                    <option value="trackName">Track Name (contains "bass")</option>
+                    <option value="lowest">Lowest Pitch Track</option>
+                    <option value="channel">MIDI Channel 1-2</option>
+                </select>
+            </div>
+
+            <div class="option-group">
+                <label>Note Range Filter (Optional)</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="number" id="minNote" placeholder="Min note (e.g., 28 = E1)" min="0" max="127">
+                    <input type="number" id="maxNote" placeholder="Max note (e.g., 60 = C4)" min="0" max="127">
+                </div>
+                <div class="help-text">Leave empty to use all notes. Standard bass range: E1 (28) to G4 (67)</div>
+            </div>
+        </div>
+
+        <div class="upload-section" id="dropZone">
+            <div style="font-size: 4rem; margin-bottom: 15px;">🎵</div>
+            <h2>Drop your .mid/.midi file here</h2>
+            <p style="margin: 10px 0; color: #888;">or</p>
+            <button class="btn" onclick="document.getElementById('fileInput').click()">Choose MIDI File</button>
+            <input type="file" id="fileInput" accept=".mid,.midi,audio/midi,audio/x-midi">
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Parsing MIDI file...</p>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+        <div class="success-message" id="successMessage"></div>
+
+        <div class="results-section" id="results">
+            <div class="track-info">
+                <h3 id="trackName">Track: Unknown</h3>
+                <p style="color: #888; margin-top: 10px;">
+                    Note Range: <span id="noteRange">-</span> | 
+                    Total Notes: <span id="totalNotes">0</span> | 
+                    Duration: <span id="duration">0:00</span>
+                </p>
+            </div>
+
+            <div class="frets-container" id="fretsContainer">
+                <!-- Populated by JS -->
+            </div>
+
+            <div class="export-section">
+                <h3>💾 Export 5 Fret Timestamps</h3>
+                <div class="export-buttons">
+                    <button class="btn" onclick="exportIndividual()">Export 5 TXT Files (One per Fret)</button>
+                    <button class="btn" onclick="exportJSON()">Export as JSON</button>
+                    <button class="btn" onclick="exportCSV()">Export as CSV</button>
+                    <button class="btn btn-secondary" onclick="copyAll()">Copy All to Clipboard</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let midiData = null;
+        let fretNotes = [[], [], [], [], []]; // 5 frets
+
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const loading = document.getElementById('loading');
+        const results = document.getElementById('results');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0 && files[0].name.match(/\.(mid|midi)$/i)) {
+                handleFile(files[0]);
+            } else {
+                showError('Please drop a MIDI file (.mid or .midi)');
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        function showError(msg) {
+            errorMessage.textContent = '❌ ' + msg;
+            errorMessage.style.display = 'block';
+        }
+
+        function handleFile(file) {
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+            results.style.display = 'none';
+            loading.style.display = 'block';
+
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                try {
+                    parseMIDI(e.target.result, file.name);
+                    loading.style.display = 'none';
+                    results.style.display = 'block';
+                    successMessage.textContent = `✅ Successfully parsed ${file.name}`;
+                    successMessage.style.display = 'block';
+                    results.scrollIntoView({ behavior: 'smooth' });
+                } catch (err) {
+                    loading.style.display = 'none';
+                    showError('Error: ' + err.message);
+                }
+            };
+
+            reader.onerror = () => {
+                loading.style.display = 'none';
+                showError('Error reading file');
+            };
+
+            reader.readAsArrayBuffer(file);
+        }
+
+        function parseMIDI(arrayBuffer, filename) {
+            const data = new Uint8Array(arrayBuffer);
+            let pos = 0;
+
+            if (String.fromCharCode(...data.slice(0, 4)) !== 'MThd') {
+                throw new Error('Invalid MIDI file');
+            }
+
+            pos = 8;
+            const format = (data[pos] << 8) | data[pos + 1];
+            pos += 2;
+            const numTracks = (data[pos] << 8) | data[pos + 1];
+            pos += 2;
+            const timeDivision = (data[pos] << 8) | data[pos + 1];
+            pos += 2;
+
+            const ticksPerBeat = timeDivision & 0x7FFF;
+            let globalTempo = 500000;
+            const tracks = [];
+
+            for (let trackNum = 0; trackNum < numTracks; trackNum++) {
+                if (String.fromCharCode(...data.slice(pos, pos + 4)) !== 'MTrk') continue;
+
+                pos += 4;
+                const trackLength = (data[pos] << 24) | (data[pos + 1] << 16) | 
+                                   (data[pos + 2] << 8) | data[pos + 3];
+                pos += 4;
+
+                const trackEnd = pos + trackLength;
+                const track = { name: `Track ${trackNum + 1}`, notes: [] };
+                let trackTime = 0;
+                let lastStatus = 0;
+
+                while (pos < trackEnd) {
+                    let deltaTime = 0;
+                    let byte;
+                    do {
+                        byte = data[pos++];
+                        deltaTime = (deltaTime << 7) | (byte & 0x7F);
+                    } while (byte & 0x80);
+
+                    trackTime += deltaTime;
+
+                    let status = data[pos++];
+                    if (status < 0x80) {
+                        status = lastStatus;
+                        pos--;
+                    } else {
+                        lastStatus = status;
+                    }
+
+                    const eventType = status & 0xF0;
+
+                    if (eventType === 0x90) {
+                        const note = data[pos++];
+                        const velocity = data[pos++];
+                        if (velocity > 0) {
+                            track.notes.push({ tick: trackTime, note: note, velocity: velocity });
+                        }
+                    } else if (eventType === 0x80) {
+                        pos += 2;
+                    } else if (eventType === 0xB0 || eventType === 0xE0) {
+                        pos += 2;
+                    } else if (eventType === 0xC0 || eventType === 0xD0) {
+                        pos += 1;
+                    } else if (status === 0xFF) {
+                        const metaType = data[pos++];
+                        let metaLength = 0;
+                        let mb;
+                        do {
+                            mb = data[pos++];
+                            metaLength = (metaLength << 7) | (mb & 0x7F);
+                        } while (mb & 0x80);
+
+                        const metaData = data.slice(pos, pos + metaLength);
+                        pos += metaLength;
+
+                        if (metaType === 0x03) {
+                            track.name = String.fromCharCode(...metaData);
+                        } else if (metaType === 0x51) {
+                            globalTempo = (metaData[0] << 16) | (metaData[1] << 8) | metaData[2];
+                        }
+                    } else if (status === 0xF0 || status === 0xF7) {
+                        while (data[pos++] !== 0xF7) {}
+                    }
+                }
+
+                tracks.push(track);
+            }
+
+            // Find bass track
+            const method = document.getElementById('detectionMethod').value;
+            let bassTrack = null;
+
+            if (method === 'trackName') {
+                const keywords = ['bass', 'bass guitar', 'fingered bass', 'picked bass', 'fretless'];
+                bassTrack = tracks.find(t => keywords.some(k => t.name.toLowerCase().includes(k)));
+                if (!bassTrack) bassTrack = tracks.find(t => t.notes.length > 0);
+            } else if (method === 'lowest') {
+                let lowestAvg = Infinity;
+                tracks.forEach(t => {
+                    if (t.notes.length > 0) {
+                        const avg = t.notes.reduce((a, b) => a + b.note, 0) / t.notes.length;
+                        if (avg < lowestAvg) {
+                            lowestAvg = avg;
+                            bassTrack = t;
+                        }
+                    }
+                });
+            } else {
+                bassTrack = tracks.find(t => t.notes.length > 0);
+            }
+
+            if (!bassTrack || bassTrack.notes.length === 0) {
+                throw new Error('No bass notes found');
+            }
+
+            // Filter by note range if specified
+            const minNote = parseInt(document.getElementById('minNote').value) || 0;
+            const maxNote = parseInt(document.getElementById('maxNote').value) || 127;
+            let notes = bassTrack.notes.filter(n => n.note >= minNote && n.note <= maxNote);
+
+            if (notes.length === 0) {
+                throw new Error('No notes in specified range');
+            }
+
+            // Sort by pitch to find ranges
+            const uniqueNotes = [...new Set(notes.map(n => n.note))].sort((a, b) => a - b);
+
+            if (uniqueNotes.length < 5) {
+                throw new Error(`Only ${uniqueNotes.length} unique pitches found. Need at least 5 for 5-fret mapping.`);
+            }
+
+            // Divide into 5 equal groups by pitch
+            const notesPerFret = Math.ceil(uniqueNotes.length / 5);
+            const fretRanges = [
+                uniqueNotes.slice(0, notesPerFret),                                    // Green (lowest)
+                uniqueNotes.slice(notesPerFret, notesPerFret * 2),                     // Red
+                uniqueNotes.slice(notesPerFret * 2, notesPerFret * 3),                  // Yellow
+                uniqueNotes.slice(notesPerFret * 3, notesPerFret * 4),                 // Blue
+                uniqueNotes.slice(notesPerFret * 4)                                     // Orange (highest)
+            ];
+
+            // Map notes to frets
+            fretNotes = [[], [], [], [], []];
+            const bpm = 60000000 / globalTempo;
+            const msPerTick = (60000 / bpm) / ticksPerBeat;
+
+            notes.forEach(n => {
+                const time = Math.round(n.tick * msPerTick);
+                for (let fret = 0; fret < 5; fret++) {
+                    if (fretRanges[fret].includes(n.note)) {
+                        fretNotes[fret].push({
+                            time: time,
+                            tick: n.tick,
+                            note: n.note,
+                            noteName: midiNoteToName(n.note)
+                        });
+                        break;
+                    }
+                }
+            });
+
+            // Sort each fret by time and remove duplicates
+            for (let i = 0; i < 5; i++) {
+                fretNotes[i].sort((a, b) => a.time - b.time);
+                const seen = new Set();
+                fretNotes[i] = fretNotes[i].filter(n => {
+                    if (seen.has(n.time)) return false;
+                    seen.add(n.time);
+                    return true;
+                });
+            }
+
+            // Display info
+            document.getElementById('trackName').textContent = `Track: ${bassTrack.name}`;
+            document.getElementById('noteRange').textContent = `${midiNoteToName(uniqueNotes[0])} - ${midiNoteToName(uniqueNotes[uniqueNotes.length - 1])}`;
+            document.getElementById('totalNotes').textContent = notes.length;
+            const maxTime = Math.max(...fretNotes.map(f => f.length > 0 ? f[f.length - 1].time : 0));
+            document.getElementById('duration').textContent = formatTime(maxTime);
+
+            // Display fret cards
+            const container = document.getElementById('fretsContainer');
+            container.innerHTML = '';
+            const fretNames = ['Green (Lowest)', 'Red', 'Yellow', 'Blue', 'Orange (Highest)'];
+            const fretClasses = ['fret-0', 'fret-1', 'fret-2', 'fret-3', 'fret-4'];
+
+            for (let i = 0; i < 5; i++) {
+                const range = fretRanges[i];
+                const card = document.createElement('div');
+                card.className = 'fret-card';
+
+                let listHTML = '<ul class="timestamp-list">';
+                const displayCount = Math.min(fretNotes[i].length, 12);
+                for (let j = 0; j < displayCount; j++) {
+                    const n = fretNotes[i][j];
+                    listHTML += `<li><span>${n.time}ms</span><span class="note-name">${n.noteName}</span></li>`;
+                }
+                if (fretNotes[i].length > 12) {
+                    listHTML += `<li style="text-align:center; color:#666;">... ${fretNotes[i].length - 12} more ...</li>`;
+                }
+                listHTML += '</ul>';
+
+                card.innerHTML = `
+                    <div class="fret-header ${fretClasses[i]}">
+                        <div>
+                            <div>${fretNames[i]}</div>
+                            <div class="note-range">${midiNoteToName(range[0])} - ${midiNoteToName(range[range.length - 1])}</div>
+                        </div>
+                        <span class="note-count">${fretNotes[i].length}</span>
+                    </div>
+                    <div class="fret-content">
+                        ${listHTML}
+                    </div>
+                `;
+
+                container.appendChild(card);
+            }
+        }
+
+        function midiNoteToName(note) {
+            const names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+            const octave = Math.floor(note / 12) - 1;
+            return names[note % 12] + octave;
+        }
+
+        function formatTime(ms) {
+            const totalSeconds = Math.floor(ms / 1000);
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function exportIndividual() {
+            const names = ['green', 'red', 'yellow', 'blue', 'orange'];
+            for (let i = 0; i < 5; i++) {
+                const content = fretNotes[i].map(n => n.time).join('\n');
+                downloadFile(content, `${names[i]}_timestamps.txt`, 'text/plain');
+            }
+        }
+
+        function exportJSON() {
+            const data = {
+                metadata: {
+                    track: document.getElementById('trackName').textContent,
+                    mapping: "Pitch-based: Lowest=Green, Highest=Orange"
+                },
+                timestamps: {
+                    green: fretNotes[0].map(n => ({ time: n.time, note: n.noteName })),
+                    red: fretNotes[1].map(n => ({ time: n.time, note: n.noteName })),
+                    yellow: fretNotes[2].map(n => ({ time: n.time, note: n.noteName })),
+                    blue: fretNotes[3].map(n => ({ time: n.time, note: n.noteName })),
+                    orange: fretNotes[4].map(n => ({ time: n.time, note: n.noteName }))
+                }
+            };
+            downloadFile(JSON.stringify(data, null, 2), 'bass_5fret_timestamps.json', 'application/json');
+        }
+
+        function exportCSV() {
+            let csv = 'fret,timestamp_ms,note,note_name\n';
+            const names = ['green', 'red', 'yellow', 'blue', 'orange'];
+            for (let i = 0; i < 5; i++) {
+                for (const n of fretNotes[i]) {
+                    csv += `${names[i]},${n.time},${n.note},${n.noteName}\n`;
+                }
+            }
+            downloadFile(csv, 'bass_5fret_timestamps.csv', 'text/csv');
+        }
+
+        function copyAll() {
+            let text = '';
+            const names = ['GREEN', 'RED', 'YELLOW', 'BLUE', 'ORANGE'];
+            for (let i = 0; i < 5; i++) {
+                text += `=== ${names[i]} ===\n`;
+                text += fretNotes[i].map(n => n.time).join('\n');
+                text += '\n\n';
+            }
+            navigator.clipboard.writeText(text).then(() => alert('Copied!'));
+        }
+
+        function downloadFile(content, filename, type) {
+            const blob = new Blob([content], { type });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
