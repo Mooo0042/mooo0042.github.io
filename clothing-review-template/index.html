@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clothing Review Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EDE7D9;
+    --bg-fiber:#e4ddc9;
+    --panel:#FFFDF8;
+    --ink:#262220;
+    --ink-soft:#6b6259;
+    --thread-red:#B23A38;
+    --thread-red-dark:#8f2c2b;
+    --thread-teal:#2F6F66;
+    --mustard:#D9A441;
+    --line:#d8cfba;
+    --line-strong:#c3b89d;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 1px 1px, rgba(0,0,0,0.035) 1px, transparent 0) 0 0/14px 14px,
+      var(--bg);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    min-height:100vh;
+    padding:32px 20px 80px;
+  }
+  .wrap{max-width:1180px;margin:0 auto;}
+
+  /* ---------- Header ---------- */
+  header{margin-bottom:28px;}
+  .eyebrow{
+    font-family:'Space Mono',monospace;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--thread-teal);
+    display:flex;align-items:center;gap:8px;
+    margin-bottom:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px;height:1px;background:var(--thread-teal);
+    display:inline-block;
+  }
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:700;
+    font-size:clamp(32px,4.6vw,52px);
+    line-height:1.02;
+    margin:0 0 10px;
+    letter-spacing:-0.01em;
+  }
+  h1 em{
+    font-style:italic;
+    color:var(--thread-red);
+  }
+  .subtitle{
+    color:var(--ink-soft);
+    font-size:15px;
+    max-width:560px;
+    line-height:1.5;
+    margin:0 0 22px;
+  }
+
+  .lang-switch{
+    display:inline-flex;
+    gap:6px;
+    background:var(--panel);
+    border:1px solid var(--line-strong);
+    border-radius:999px;
+    padding:4px;
+  }
+  .lang-switch button{
+    font-family:'Space Mono',monospace;
+    font-size:12.5px;
+    letter-spacing:.03em;
+    border:none;
+    background:transparent;
+    color:var(--ink-soft);
+    padding:8px 16px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:background .15s ease, color .15s ease;
+  }
+  .lang-switch button.active{
+    background:var(--ink);
+    color:#fff;
+  }
+  .lang-switch button:not(.active):hover{
+    background:var(--bg-fiber);
+    color:var(--ink);
+  }
+
+  /* ---------- Layout ---------- */
+  .app{
+    display:grid;
+    grid-template-columns:1.15fr 0.85fr;
+    gap:28px;
+    align-items:start;
+    margin-top:28px;
+  }
+  @media (max-width:880px){
+    .app{grid-template-columns:1fr;}
+  }
+
+  /* ---------- Form panel ---------- */
+  .form-panel{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:8px 22px 18px;
+  }
+  .category{
+    border:none;
+    border-bottom:1px dashed var(--line-strong);
+    padding:16px 0;
+    margin:0;
+  }
+  .category:last-of-type{border-bottom:none;}
+  .category legend{
+    padding:0;
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+    width:100%;
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:17px;
+    margin-bottom:10px;
+    color:var(--ink);
+  }
+  .category legend .num{
+    font-family:'Space Mono',monospace;
+    font-size:11px;
+    color:var(--thread-red);
+    letter-spacing:.05em;
+  }
+  .options{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+  }
+  .opt{
+    position:relative;
+  }
+  .opt input{
+    position:absolute;
+    opacity:0;
+    width:100%;height:100%;
+    margin:0;
+    cursor:pointer;
+  }
+  .opt label{
+    display:inline-block;
+    font-size:13px;
+    line-height:1.3;
+    padding:7px 12px;
+    border-radius:999px;
+    border:1px solid var(--line-strong);
+    background:#fff;
+    color:var(--ink-soft);
+    cursor:pointer;
+    transition:all .12s ease;
+    user-select:none;
+  }
+  .opt label:hover{border-color:var(--thread-teal); color:var(--ink);}
+  .opt input:checked + label{
+    background:var(--thread-teal);
+    border-color:var(--thread-teal);
+    color:#fff;
+    font-weight:600;
+  }
+  .opt.hide-opt label{
+    border-style:dashed;
+    color:#a49a8c;
+  }
+  .opt.hide-opt input:checked + label{
+    background:var(--ink-soft);
+    border-color:var(--ink-soft);
+    color:#fff;
+  }
+
+  .rating-row{display:flex;flex-wrap:wrap;gap:7px;}
+  .rating-row .opt label{
+    min-width:34px;
+    text-align:center;
+    font-family:'Space Mono',monospace;
+  }
+  .rating-row .opt input:checked + label{
+    background:var(--mustard);
+    border-color:var(--mustard);
+    color:#2a2116;
+  }
+
+  .overall-row{
+    display:flex;
+    gap:7px;
+    margin-bottom:6px;
+  }
+  .overall-row .opt label{
+    font-size:14px;
+    font-weight:600;
+    padding:9px 16px;
+  }
+  .overall-row .opt input:checked + label{
+    background:var(--thread-red);
+    border-color:var(--thread-red);
+  }
+
+  /* ---------- Tag panel ---------- */
+  .tag-panel{position:sticky; top:24px;}
+  .tag-shell{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .string{
+    width:2px;
+    height:34px;
+    background:repeating-linear-gradient(180deg, var(--ink-soft) 0 5px, transparent 5px 9px);
+    margin-bottom:-2px;
+  }
+  .tag{
+    position:relative;
+    width:100%;
+    background:var(--panel);
+    border:1px solid var(--line-strong);
+    border-radius:16px 16px 40px 40px / 16px 16px 22px 22px;
+    padding:34px 26px 26px;
+    box-shadow:0 18px 34px -18px rgba(38,34,32,.35);
+    transform:rotate(-0.6deg);
+  }
+  .tag::before{
+    content:"";
+    position:absolute;
+    top:16px; left:50%;
+    transform:translateX(-50%);
+    width:16px;height:16px;
+    border-radius:50%;
+    background:var(--bg);
+    border:1px solid var(--line-strong);
+    box-shadow:inset 0 0 0 3px var(--panel);
+  }
+  .tag::after{
+    content:"";
+    position:absolute;
+    inset:9px;
+    border:1.5px dashed var(--line-strong);
+    border-radius:11px 11px 34px 34px / 11px 11px 18px 18px;
+    pointer-events:none;
+  }
+  .tag-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:14px;
+  }
+  .tag-verdict{
+    font-family:'Fraunces',serif;
+    font-weight:700;
+    font-size:19px;
+  }
+  .tag-verdict.yes{color:var(--thread-teal);}
+  .tag-verdict.no{color:var(--thread-red);}
+  .tag-score{
+    font-family:'Space Mono',monospace;
+    font-size:12px;
+    background:var(--mustard);
+    color:#2a2116;
+    padding:4px 9px;
+    border-radius:6px;
+    white-space:nowrap;
+  }
+  #output{
+    font-family:'Space Mono',monospace;
+    font-size:12.5px;
+    line-height:1.65;
+    white-space:pre-wrap;
+    color:var(--ink);
+    max-height:56vh;
+    overflow-y:auto;
+    padding-right:4px;
+  }
+  #output::-webkit-scrollbar{width:6px;}
+  #output::-webkit-scrollbar-thumb{background:var(--line-strong); border-radius:3px;}
+
+  .tag-actions{
+    display:flex;
+    gap:8px;
+    margin-top:16px;
+  }
+  .btn{
+    font-family:'Inter',sans-serif;
+    font-size:13px;
+    font-weight:600;
+    border:none;
+    border-radius:8px;
+    padding:11px 14px;
+    cursor:pointer;
+    flex:1;
+    transition:transform .1s ease, opacity .15s ease;
+  }
+  .btn:active{transform:scale(.97);}
+  .btn-primary{background:var(--ink); color:#fff;}
+  .btn-primary:hover{opacity:.88;}
+  .btn-ghost{background:transparent; color:var(--ink); border:1px solid var(--line-strong);}
+  .btn-ghost:hover{border-color:var(--ink);}
+  .copied-flag{
+    font-family:'Space Mono',monospace;
+    font-size:11px;
+    color:var(--thread-teal);
+    text-align:center;
+    height:16px;
+    margin-top:8px;
+    opacity:0;
+    transition:opacity .2s ease;
+  }
+  .copied-flag.show{opacity:1;}
+
+  footer{
+    text-align:center;
+    color:var(--ink-soft);
+    font-family:'Space Mono',monospace;
+    font-size:11px;
+    margin-top:36px;
+    letter-spacing:.02em;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 id="title">Clothing <em>Review</em> Generator</h1>
+    <div class="lang-switch" role="tablist" id="langSwitch">
+      <button data-lang="en">EN</button>
+      <button data-lang="de">DE</button>
+      <button data-lang="uwu">UwU</button>
+    </div>
+  </header>
+
+  <div class="app">
+    <form class="form-panel" id="formPanel"></form>
+
+    <div class="tag-panel">
+      <div class="tag-shell">
+        <div class="string"></div>
+        <div class="tag">
+          <div class="tag-head">
+            <div class="tag-verdict" id="tagVerdict"></div>
+            <div class="tag-score" id="tagScore"></div>
+          </div>
+          <div id="output"></div>
+          <div class="tag-actions">
+            <button type="button" class="btn btn-primary" id="copyBtn">Copy output</button>
+          </div>
+          <div class="copied-flag" id="copiedFlag"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================= DATA ============================= */
+const DATA = {
+  en: {
+    ui: {
+      titlePre: "Clothing ", titleEm: "Review", titlePost: " Generator",
+      copy: "Copy output",
+      copied: "Copied to clipboard!",
+      hide: "Hide",
+      recommended: "Recommended",
+      notRecommended: "Not Recommended",
+      ratingLabel: "Rating",
+      outOf: "/ 10"
+    },
+    categories: [
+      { key:"fit", name:"Fit", options:[
+        "Second skin, tailored feel","True to size","A little snug/loose, but wearable",
+        "Runs noticeably big or small","Better used as a rag" ] },
+      { key:"material", name:"Material Quality", options:[
+        "Buttery soft, high-end feel","Good quality","Gets the job done",
+        "A bit scratchy","Feels like a potato sack" ] },
+      { key:"comfort", name:"Comfort", options:[
+        "Could sleep in it","Comfy","Fine for a few hours",
+        "Starts pinching eventually","Actively hostile to your body" ] },
+      { key:"durability", name:"Durability", options:[
+        "Will outlive us all","Sturdy","Survives normal wear",
+        "Pilling after one wash","Falls apart if you look at it wrong" ] },
+      { key:"style", name:"Style", options:[
+        "Turns heads","Looks great","Solid everyday look",
+        "A bit dated","Certified fashion crime" ] },
+      { key:"color", name:"Color Accuracy", options:[
+        "Exactly like the photos","Very close","Slightly different in person",
+        "Noticeably off","Apparently a completely different item" ] },
+      { key:"breathability", name:"Breathability", options:[
+        "Cool as a breeze","Breathes well","Fine indoors",
+        "Gets sweaty fast","Personal sauna" ] },
+      { key:"care", name:"Care", options:[
+        "Throw it in and forget it","Easy care","Standard washing instructions",
+        "Hand wash only, annoying","Dry clean only, RIP wallet" ] },
+      { key:"versatility", name:"Versatility", options:[
+        "Goes with everything","Very versatile","Works with a few outfits",
+        "One-outfit wonder","Only works in the dark, alone" ] },
+      { key:"price", name:"Price", options:[
+        "Steal of the century","Worth every cent","Fair for what you get",
+        "A bit overpriced","Highway robbery" ] },
+      { key:"craftsmanship", name:"Craftsmanship", options:[
+        "Flawless stitching","Minor loose threads","A couple of small defects",
+        "Missing buttons/holes","Looks sewn during an earthquake" ] }
+    ]
+  },
+  de: {
+    ui: {
+      titlePre: "Kleidungs-", titleEm: "Bewertungs", titlePost: "generator",
+      copy: "Ausgabe kopieren",
+      copied: "In die Zwischenablage kopiert!",
+      hide: "Verstecken",
+      recommended: "Empfohlen",
+      notRecommended: "Nicht empfohlen",
+      ratingLabel: "Bewertung",
+      outOf: "/ 10"
+    },
+    categories: [
+      { key:"fit", name:"Passform", options:[
+        "Wie eine zweite Haut, maßgeschneidert","Fällt normal aus","Etwas eng/weit, aber tragbar",
+        "Fällt deutlich groß oder klein aus","Taugt eher als Putzlappen" ] },
+      { key:"material", name:"Stoffqualität", options:[
+        "Butterweich, fühlt sich hochwertig an","Gute Qualität","Erfüllt seinen Zweck",
+        "Etwas kratzig","Fühlt sich wie ein Kartoffelsack an" ] },
+      { key:"comfort", name:"Komfort", options:[
+        "Könnte darin schlafen","Bequem","Für ein paar Stunden okay",
+        "Zwickt irgendwann","Regelrecht unbequem" ] },
+      { key:"durability", name:"Haltbarkeit", options:[
+        "Überlebt uns alle","Robust","Hält normalem Tragen stand",
+        "Pillt schon nach einer Wäsche","Zerfällt bei schiefem Anblick" ] },
+      { key:"style", name:"Style", options:[
+        "Alle Blicke sind darauf gerichtet","Sieht toll aus","Solider Alltagslook",
+        "Etwas altmodisch","Modesünde erster Klasse" ] },
+      { key:"color", name:"Farbgenauigkeit", options:[
+        "Exakt wie auf den Fotos","Sehr nah dran","In echt leicht anders",
+        "Deutlich abweichend","Offenbar ein komplett anderes Teil" ] },
+      { key:"breathability", name:"Atmungsaktivität", options:[
+        "Angenehm luftig","Atmet gut","Drinnen okay",
+        "Wird schnell schwitzig","Persönliche Sauna" ] },
+      { key:"care", name:"Pflege", options:[
+        "Einfach reinwerfen und vergessen","Pflegeleicht","Normale Waschanleitung",
+        "Nur Handwäsche, nervig","Nur chemische Reinigung, RIP Geldbeutel" ] },
+      { key:"versatility", name:"Vielseitigkeit", options:[
+        "Passt zu allem","Sehr vielseitig","Passt zu ein paar Outfits",
+        "Ein-Outfit-Wunder","Funktioniert nur im Dunkeln, allein" ] },
+      { key:"price", name:"Preis", options:[
+        "Schnäppchen des Jahrhunderts","Jeden Cent wert","Fair für das Gebotene",
+        "Etwas überteuert","Wegelagerei" ] },
+      { key:"craftsmanship", name:"Verarbeitung", options:[
+        "Makellose Nähte","Kleine lose Fäden","Ein paar kleine Mängel",
+        "Fehlende Knöpfe/Löcher","Sieht aus, als während eines Erdbebens genäht" ] }
+    ]
+  },
+  uwu: {
+    ui: {
+      titlePre: "Cwothing ", titleEm: "Weview", titlePost: " Genewatow",
+      copy: "Copy output owo",
+      copied: "Copied to cwipboawd! ヽ(>∀<☆)ノ",
+      hide: "Hide",
+      recommended: "Wecommended",
+      notRecommended: "Not Wecommended",
+      ratingLabel: "Wating",
+      outOf: "/ 10"
+    },
+    categories: [
+      { key:"fit", name:"Fitto", options:[
+        "Second skin, taiwowed feew (づ｡◕‿‿◕｡)づ","Twue to size","A wittle snug/woose but stiww weawable",
+        "Wuns big/smoww nya","Bettew as a wag (╥﹏╥)" ] },
+      { key:"material", name:"Matewiaw Quawity", options:[
+        "Buttewy soft, high-end feew ( ˘ ³˘)♥","Good quawity","Gets da job done",
+        "A wittle scwatchy >w<","Feews wike a potato sack (╥﹏╥)" ] },
+      { key:"comfort", name:"Comfy Levew", options:[
+        "Couwd sweep in it (˘▾˘~)","Comfy nya~","Fine fow a few houws",
+        "Stawts pinching eventuawwy","Activewy howwibwe fow uw body (╥﹏╥)" ] },
+      { key:"durability", name:"Toughness", options:[
+        "Wiww outwive us aww ヽ(°〇°)ﾉ","Stuwdy","Suwvives nowmaw weaw n teaw",
+        "Piwwing aftew one wash","Fawws apawt if u wook at it wong (╥﹏╥)" ] },
+      { key:"style", name:"Stywe", options:[
+        "Tuwns heads (☞ﾟヮﾟ)☞","Wooks gweat","Sowid evewyday wook",
+        "A bit dated","Cewtified fashion cwime (¬‿¬)" ] },
+      { key:"color", name:"Cowow Accuwacy", options:[
+        "Exactwy wike da photos","Vewy cwose","Swightwy diffewent in pewson",
+        "Noticeabwy off","Compwetewy diffewent item apparentwy owo" ] },
+      { key:"breathability", name:"Bweathiness", options:[
+        "Coow as a bweeze ( ´ ω ` )","Bweathes weww","Fine indoows",
+        "Gets sweaty fast","Pewsonaw sauna (╥﹏╥)" ] },
+      { key:"care", name:"Cawe", options:[
+        "Thwow it in n fowget it","Easy cawe","Standawd washing instwuctions",
+        "Hand wash onwy, annoying >~<","Dwy cwean onwy, wip wawwet (╥﹏╥)" ] },
+      { key:"versatility", name:"Vewsatiwity", options:[
+        "Goes wif evewything ٩(◕‿◕)۶","Vewy vewsatiwe","Wowks wif a few outfits",
+        "One-outfit wondew","Onwy wowks in da dawk, awone (;ω;)" ] },
+      { key:"price", name:"Pwice", options:[
+        "Steaw of da centuwy ヽ(>∀<☆)ノ","Wowth evewy cent","Faiw fow what u get",
+        "A wittle ovewpwiced","Highway wobbewy (╬ Ò﹏Ó)" ] },
+      { key:"craftsmanship", name:"Cwaftsmanship", options:[
+        "Fwawwess stitching (｡•́‿•̀｡)","Minow woose thweads","A coupwe smoww defects",
+        "Missing buttons/howes","Sewn duwing an eawthquake appawentwy (╥﹏╥)" ] }
+    ]
+  }
+};
+
+/* ============================= STATE ============================= */
+let lang = "en";
+const state = {
+  overall: "yes",
+  ratings: {},      // key -> selected option index, or "hide"
+  score: 8
+};
+// init defaults
+DATA.en.categories.forEach(c => state.ratings[c.key] = 0);
+
+/* ============================= RENDER FORM ============================= */
+function renderForm(){
+  const d = DATA[lang];
+  const form = document.getElementById("formPanel");
+  form.innerHTML = "";
+
+  // overall
+  const overallField = document.createElement("fieldset");
+  overallField.className = "category";
+  overallField.innerHTML = `
+    <legend><span class="num">00</span> ${lang==='de' ? 'Gesamturteil' : (lang==='uwu' ? 'Ovewaww' : 'Overall')}</legend>
+    <div class="overall-row">
+      <div class="opt">
+        <input type="radio" name="overall" id="ov-yes" ${state.overall==='yes'?'checked':''}>
+        <label for="ov-yes">${d.ui.recommended}</label>
+      </div>
+      <div class="opt">
+        <input type="radio" name="overall" id="ov-no" ${state.overall==='no'?'checked':''}>
+        <label for="ov-no">${d.ui.notRecommended}</label>
+      </div>
+    </div>`;
+  overallField.querySelector("#ov-yes").addEventListener("change", () => { state.overall='yes'; update(); });
+  overallField.querySelector("#ov-no").addEventListener("change", () => { state.overall='no'; update(); });
+  form.appendChild(overallField);
+
+  d.categories.forEach((cat, ci) => {
+    const field = document.createElement("fieldset");
+    field.className = "category";
+    const num = String(ci+1).padStart(2,"0");
+    let optsHtml = "";
+    cat.options.forEach((opt, oi) => {
+      const id = `${cat.key}-${oi}`;
+      const checked = state.ratings[cat.key] === oi ? "checked" : "";
+      optsHtml += `<div class="opt">
+        <input type="radio" name="${cat.key}" id="${id}" ${checked}>
+        <label for="${id}">${opt}</label>
+      </div>`;
+    });
+    const hideId = `${cat.key}-hide`;
+    const hideChecked = state.ratings[cat.key] === "hide" ? "checked" : "";
+    optsHtml += `<div class="opt hide-opt">
+      <input type="radio" name="${cat.key}" id="${hideId}" ${hideChecked}>
+      <label for="${hideId}">${d.ui.hide}</label>
+    </div>`;
+
+    field.innerHTML = `<legend><span class="num">${num}</span> ${cat.name}</legend>
+      <div class="options">${optsHtml}</div>`;
+    form.appendChild(field);
+
+    cat.options.forEach((opt, oi) => {
+      field.querySelector(`#${cat.key}-${oi}`).addEventListener("change", () => {
+        state.ratings[cat.key] = oi; update();
+      });
+    });
+    field.querySelector(`#${hideId}`).addEventListener("change", () => {
+      state.ratings[cat.key] = "hide"; update();
+    });
+  });
+
+  // rating
+  const ratingField = document.createElement("fieldset");
+  ratingField.className = "category";
+  let ratingOpts = "";
+  for(let i=1;i<=10;i++){
+    const id = `score-${i}`;
+    ratingOpts += `<div class="opt">
+      <input type="radio" name="score" id="${id}" ${state.score===i?'checked':''}>
+      <label for="${id}">${i}</label>
+    </div>`;
+  }
+  ratingField.innerHTML = `<legend><span class="num">12</span> ${d.ui.ratingLabel}</legend>
+    <div class="rating-row">${ratingOpts}</div>`;
+  form.appendChild(ratingField);
+  for(let i=1;i<=10;i++){
+    ratingField.querySelector(`#score-${i}`).addEventListener("change", () => { state.score=i; update(); });
+  }
+}
+
+/* ============================= OUTPUT ============================= */
+function buildOutput(){
+  const d = DATA[lang];
+  const lines = [];
+  const verdict = state.overall === "yes" ? d.ui.recommended : d.ui.notRecommended;
+  lines.push(`${state.overall==='yes' ? '☑' : '☐'} ${verdict}`);
+  lines.push("");
+
+  d.categories.forEach(cat => {
+    const sel = state.ratings[cat.key];
+    if (sel === "hide") return;
+    lines.push(`* ${cat.name}`);
+    cat.options.forEach((opt, oi) => {
+      lines.push(`${oi===sel ? '☑' : '☐'} ${opt}`);
+    });
+    lines.push("");
+  });
+
+  lines.push(`* ${d.ui.ratingLabel}`);
+  lines.push(`${state.score} ${d.ui.outOf}`);
+
+  lines.push("");
+  lines.push("Generated with Clothing Review Template");
+  lines.push("https://mooo0042.github.io/clothing-review-template/");
+
+  return lines.join("\n");
+}
+
+function update(){
+  const d = DATA[lang];
+  document.getElementById("output").textContent = buildOutput();
+  const verdictEl = document.getElementById("tagVerdict");
+  verdictEl.textContent = state.overall === "yes" ? d.ui.recommended : d.ui.notRecommended;
+  verdictEl.className = "tag-verdict " + (state.overall === "yes" ? "yes" : "no");
+  document.getElementById("tagScore").textContent = `${state.score} ${d.ui.outOf}`;
+}
+
+/* ============================= CHROME (title, subtitle, etc) ============================= */
+function renderChrome(){
+  const d = DATA[lang];
+  document.getElementById("title").innerHTML = `${d.ui.titlePre}<em>${d.ui.titleEm}</em>${d.ui.titlePost}`;
+  document.getElementById("copyBtn").textContent = d.ui.copy;
+  document.documentElement.lang = lang === "uwu" ? "en" : lang;
+
+  document.querySelectorAll("#langSwitch button").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.lang === lang);
+  });
+}
+
+/* ============================= INIT / EVENTS ============================= */
+document.getElementById("langSwitch").addEventListener("click", (e) => {
+  const btn = e.target.closest("button[data-lang]");
+  if (!btn) return;
+  lang = btn.dataset.lang;
+  // keep same option indices across languages (state.ratings keyed by same cat.key & indices)
+  renderChrome();
+  renderForm();
+  update();
+});
+
+document.getElementById("copyBtn").addEventListener("click", async () => {
+  const text = document.getElementById("output").textContent;
+  const flag = document.getElementById("copiedFlag");
+  try{
+    await navigator.clipboard.writeText(text);
+  }catch(e){
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+  }
+  flag.textContent = DATA[lang].ui.copied;
+  flag.classList.add("show");
+  setTimeout(() => flag.classList.remove("show"), 1800);
+});
+
+renderChrome();
+renderForm();
+update();
+</script>
+</body>
+</html>
