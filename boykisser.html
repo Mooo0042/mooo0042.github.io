@@ -3,98 +3,282 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Boykisser License Verification</title>
+
+  <title>Boykisser License</title>
 
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
+
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #eee;
-      font-family: Arial, sans-serif;
+
+      background:
+        radial-gradient(circle at 20% 20%, rgba(211, 167, 181, 0.08), transparent 30%),
+        radial-gradient(circle at 80% 80%, rgba(211, 167, 181, 0.06), transparent 30%),
+        #10141b;
+
+      color: #e9e6e2;
+      font-family: Inter, sans-serif;
+      padding: 24px;
     }
+
+    /* ---------- LICENSE ---------- */
 
     .license {
-      width: 420px;
-      max-width: 90%;
-      background: white;
-      border: 3px solid #222;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 8px 8px 0 #222;
+      width: 680px;
+      max-width: 100%;
+
+      background: #191e27;
+      border: 1px solid #343b47;
+      border-radius: 14px;
+
+      overflow: hidden;
+
+      box-shadow:
+        0 25px 60px rgba(0, 0, 0, 0.45),
+        0 0 0 1px rgba(255,255,255,0.02);
     }
 
-    .header {
-      text-align: center;
-      border-bottom: 2px solid #222;
-      padding-bottom: 15px;
-      margin-bottom: 20px;
+    /* ---------- HEADER ---------- */
+
+    .topbar {
+      height: 7px;
+      background: #c8899e;
     }
 
-    .header h1 {
-      margin: 0;
-      font-size: 28px;
+    header {
+      padding: 25px 30px 22px;
+
+      border-bottom: 1px solid #343b47;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
     }
 
-    .header p {
+    .bureau {
+      font-family: "Space Mono", monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #9299a5;
+    }
+
+    h1 {
       margin: 5px 0 0;
-      font-size: 13px;
+
+      font-size: 25px;
+      letter-spacing: -0.5px;
+      font-weight: 800;
     }
 
-    .photo {
-      width: 110px;
-      height: 110px;
-      margin: 0 auto 20px;
-      border-radius: 50%;
-      background: #ddd;
+    .document-type {
+      font-family: "Space Mono", monospace;
+      font-size: 11px;
+      color: #c8899e;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    /* ---------- MAIN ---------- */
+
+    .main {
+      padding: 30px;
+    }
+
+    .identity {
+      display: grid;
+      grid-template-columns: 145px 1fr;
+      gap: 28px;
+    }
+
+    /* ---------- PHOTO ---------- */
+
+    .portrait {
+      height: 175px;
+
+      border: 1px solid #414957;
+      border-radius: 8px;
+
+      background:
+        linear-gradient(135deg, #242b36, #161b23);
+
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 50px;
+
+      font-family: "Space Mono", monospace;
+      font-size: 34px;
+      color: #c8899e;
+
+      position: relative;
+      overflow: hidden;
     }
+
+    .portrait::after {
+      content: "PHOTO";
+      position: absolute;
+      bottom: 8px;
+      left: 0;
+      right: 0;
+
+      text-align: center;
+
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: #686f7b;
+    }
+
+    /* ---------- NAME ---------- */
+
+    .name-label {
+      font-family: "Space Mono", monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #7e8692;
+    }
+
+    .name {
+      font-size: 30px;
+      font-weight: 700;
+
+      margin: 5px 0 25px;
+
+      color: #f0ede9;
+    }
+
+    /* ---------- STATS ---------- */
 
     .stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap: 1px;
+
+      background: #343b47;
+      border: 1px solid #343b47;
     }
 
     .stat {
-      background: #f3f3f3;
-      border-radius: 8px;
-      padding: 10px;
+      background: #191e27;
+      padding: 13px 15px;
     }
 
     .label {
       display: block;
-      font-size: 11px;
+
+      font-family: "Space Mono", monospace;
+      font-size: 9px;
+
       text-transform: uppercase;
-      color: #666;
+      letter-spacing: 1px;
+
+      color: #747c88;
+      margin-bottom: 5px;
     }
 
     .value {
       display: block;
-      font-weight: bold;
-      font-size: 17px;
-      margin-top: 3px;
+
+      font-size: 14px;
+      font-weight: 600;
+
+      color: #dedbd7;
+    }
+
+    /* ---------- STATUS ---------- */
+
+    .verification {
+      margin-top: 25px;
+
+      border: 1px solid #46504a;
+      background: #1b2521;
+
+      border-radius: 7px;
+
+      padding: 14px 16px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 15px;
+    }
+
+    .verification-label {
+      font-family: "Space Mono", monospace;
+      font-size: 10px;
+      color: #7d8a82;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .status {
-      margin-top: 20px;
-      padding: 12px;
-      text-align: center;
-      border-radius: 8px;
-      background: #d8ffd8;
-      font-weight: bold;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #a9d1ba;
     }
 
-    .footer {
-      margin-top: 15px;
-      text-align: center;
-      font-size: 11px;
-      color: #777;
+    .status.invalid {
+      color: #d99a9a;
+    }
+
+    /* ---------- FOOTER ---------- */
+
+    footer {
+      padding: 18px 30px;
+
+      border-top: 1px solid #343b47;
+
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+
+      font-family: "Space Mono", monospace;
+      font-size: 9px;
+
+      color: #626a76;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+
+    @media (max-width: 560px) {
+      .identity {
+        grid-template-columns: 1fr;
+      }
+
+      .portrait {
+        width: 145px;
+      }
+
+      header {
+        align-items: flex-start;
+      }
+
+      .document-type {
+        display: none;
+      }
+
+      .main {
+        padding: 22px;
+      }
+
+      footer {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
@@ -103,67 +287,119 @@
 
   <div class="license">
 
-    <div class="header">
-      <h1>💋 BOYKISSER LICENSE</h1>
-      <p>International Boykisser Licensing Bureau</p>
-    </div>
+    <div class="topbar"></div>
 
-    <div class="photo" id="emoji">:3</div>
+    <header>
+      <div>
+        <div class="bureau">
+          International Boykisser Licensing Bureau
+        </div>
 
-    <div class="stats">
-
-      <div class="stat">
-        <span class="label">Name</span>
-        <span class="value" id="name">Unknown</span>
+        <h1>Boykisser License</h1>
       </div>
 
-      <div class="stat">
-        <span class="label">License No.</span>
-        <span class="value" id="license">BK-000000</span>
+      <div class="document-type">
+        BK-LIC<br>
+        REV. 2026
+      </div>
+    </header>
+
+    <main class="main">
+
+      <div class="identity">
+
+        <div class="portrait" id="emoji">
+          :3
+        </div>
+
+        <div>
+          <div class="name-label">
+            License Holder
+          </div>
+
+          <div class="name" id="name">
+            Unknown
+          </div>
+
+          <div class="stats">
+
+            <div class="stat">
+              <span class="label">License Number</span>
+              <span class="value" id="license">
+                BK-000000
+              </span>
+            </div>
+
+            <div class="stat">
+              <span class="label">Classification</span>
+              <span class="value" id="class">
+                S
+              </span>
+            </div>
+
+            <div class="stat">
+              <span class="label">Kiss Rating</span>
+              <span class="value" id="kisses">
+                0 / 10
+              </span>
+            </div>
+
+            <div class="stat">
+              <span class="label">Boy Enjoyment</span>
+              <span class="value" id="enjoyment">
+                Unknown
+              </span>
+            </div>
+
+            <div class="stat">
+              <span class="label">Silliness</span>
+              <span class="value" id="silliness">
+                Unknown
+              </span>
+            </div>
+
+            <div class="stat">
+              <span class="label">Authorization</span>
+              <span class="value">
+                General
+              </span>
+            </div>
+
+          </div>
+        </div>
+
       </div>
 
-      <div class="stat">
-        <span class="label">Class</span>
-        <span class="value" id="class">S</span>
+      <div class="verification">
+
+        <div class="verification-label">
+          License Verification
+        </div>
+
+        <div class="status" id="status">
+          LICENSE VALID
+        </div>
+
       </div>
 
-      <div class="stat">
-        <span class="label">Kiss Rating</span>
-        <span class="value" id="kisses">0/10</span>
-      </div>
+    </main>
 
-      <div class="stat">
-        <span class="label">Boy Enjoyment</span>
-        <span class="value" id="enjoyment">Unknown</span>
-      </div>
-
-      <div class="stat">
-        <span class="label">Silliness</span>
-        <span class="value" id="silliness">Unknown</span>
-      </div>
-
-    </div>
-
-    <div class="status" id="status">
-      ✅ LICENSE VALID
-    </div>
-
-    <div class="footer">
-      Scan the NFC tag to verify this license.
-    </div>
+    <footer>
+      <span>Property of IBLB</span>
+      <span>Scan verified electronically</span>
+    </footer>
 
   </div>
 
+
   <script>
-    // Read values from the URL
+
     const params = new URLSearchParams(window.location.search);
 
-    // Helper function
     function getParam(name, fallback) {
       return params.get(name) || fallback;
     }
 
-    // Update the page
     document.getElementById("name").textContent =
       getParam("name", "Unknown");
 
@@ -174,7 +410,7 @@
       getParam("class", "S");
 
     document.getElementById("kisses").textContent =
-      getParam("kisses", "0") + "/10";
+      getParam("kisses", "0") + " / 10";
 
     document.getElementById("enjoyment").textContent =
       getParam("enjoyment", "Unknown");
@@ -185,17 +421,25 @@
     document.getElementById("emoji").textContent =
       getParam("emoji", ":3");
 
-    // License status
-    const valid = getParam("valid", "true") === "true";
-    const status = document.getElementById("status");
+
+    const valid =
+      getParam("valid", "true").toLowerCase() === "true";
+
+    const status =
+      document.getElementById("status");
 
     if (valid) {
-      status.textContent = "✅ LICENSE VALID";
-      status.style.background = "#d8ffd8";
+
+      status.textContent = "LICENSE VALID";
+      status.classList.remove("invalid");
+
     } else {
-      status.textContent = "❌ LICENSE REVOKED";
-      status.style.background = "#ffd8d8";
+
+      status.textContent = "LICENSE REVOKED";
+      status.classList.add("invalid");
+
     }
+
   </script>
 
 </body>
