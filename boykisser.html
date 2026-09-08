@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boykisser License Verification</title>
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #eee;
+      font-family: Arial, sans-serif;
+    }
+
+    .license {
+      width: 420px;
+      max-width: 90%;
+      background: white;
+      border: 3px solid #222;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 8px 8px 0 #222;
+    }
+
+    .header {
+      text-align: center;
+      border-bottom: 2px solid #222;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .header p {
+      margin: 5px 0 0;
+      font-size: 13px;
+    }
+
+    .photo {
+      width: 110px;
+      height: 110px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      background: #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 50px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .stat {
+      background: #f3f3f3;
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    .label {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      color: #666;
+    }
+
+    .value {
+      display: block;
+      font-weight: bold;
+      font-size: 17px;
+      margin-top: 3px;
+    }
+
+    .status {
+      margin-top: 20px;
+      padding: 12px;
+      text-align: center;
+      border-radius: 8px;
+      background: #d8ffd8;
+      font-weight: bold;
+    }
+
+    .footer {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 11px;
+      color: #777;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="license">
+
+    <div class="header">
+      <h1>💋 BOYKISSER LICENSE</h1>
+      <p>International Boykisser Licensing Bureau</p>
+    </div>
+
+    <div class="photo" id="emoji">:3</div>
+
+    <div class="stats">
+
+      <div class="stat">
+        <span class="label">Name</span>
+        <span class="value" id="name">Unknown</span>
+      </div>
+
+      <div class="stat">
+        <span class="label">License No.</span>
+        <span class="value" id="license">BK-000000</span>
+      </div>
+
+      <div class="stat">
+        <span class="label">Class</span>
+        <span class="value" id="class">S</span>
+      </div>
+
+      <div class="stat">
+        <span class="label">Kiss Rating</span>
+        <span class="value" id="kisses">0/10</span>
+      </div>
+
+      <div class="stat">
+        <span class="label">Boy Enjoyment</span>
+        <span class="value" id="enjoyment">Unknown</span>
+      </div>
+
+      <div class="stat">
+        <span class="label">Silliness</span>
+        <span class="value" id="silliness">Unknown</span>
+      </div>
+
+    </div>
+
+    <div class="status" id="status">
+      ✅ LICENSE VALID
+    </div>
+
+    <div class="footer">
+      Scan the NFC tag to verify this license.
+    </div>
+
+  </div>
+
+  <script>
+    // Read values from the URL
+    const params = new URLSearchParams(window.location.search);
+
+    // Helper function
+    function getParam(name, fallback) {
+      return params.get(name) || fallback;
+    }
+
+    // Update the page
+    document.getElementById("name").textContent =
+      getParam("name", "Unknown");
+
+    document.getElementById("license").textContent =
+      getParam("license", "BK-000000");
+
+    document.getElementById("class").textContent =
+      getParam("class", "S");
+
+    document.getElementById("kisses").textContent =
+      getParam("kisses", "0") + "/10";
+
+    document.getElementById("enjoyment").textContent =
+      getParam("enjoyment", "Unknown");
+
+    document.getElementById("silliness").textContent =
+      getParam("silliness", "Unknown");
+
+    document.getElementById("emoji").textContent =
+      getParam("emoji", ":3");
+
+    // License status
+    const valid = getParam("valid", "true") === "true";
+    const status = document.getElementById("status");
+
+    if (valid) {
+      status.textContent = "✅ LICENSE VALID";
+      status.style.background = "#d8ffd8";
+    } else {
+      status.textContent = "❌ LICENSE REVOKED";
+      status.style.background = "#ffd8d8";
+    }
+  </script>
+
+</body>
+</html>
